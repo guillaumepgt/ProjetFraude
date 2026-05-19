@@ -1,0 +1,108 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+
+' --- Énumérations ---
+enum Cursus {
+  E1
+  E2
+  E3e
+  E3a
+  E4
+  E5
+}
+
+enum Modalite {
+  EXAMEN_ECRIT
+  ORAL
+  QCM
+  SUR_ORDINATEUR
+  PROJET
+  TP
+}
+
+' --- Classes du domaine ---
+class Etudiant {
+  - numeroApprenant : String
+  - nom : String
+  - prenom : String
+  - cursus : Cursus
+  + Etudiant()
+  + Etudiant(numeroApprenant: String, nom: String, prenom: String, cursus: Cursus)
+}
+
+class Epreuve {
+  - codeECUE : String
+  - date : LocalDate
+  - heurePassage : LocalTime
+  - duree : int
+  - modalite : Modalite
+  + Epreuve()
+  + Epreuve(codeECUE: String, date: LocalDate, heurePassage: LocalTime, duree: int, modalite: Modalite)
+}
+
+class Formulaire {
+  - id : int
+  - dateCreation : LocalDateTime
+  - dateDerniereModification : LocalDateTime
+  - epreuve : Epreuve
+  - etudiants : List<Etudiant>
+  - fraudes : List<Fraude>
+  -actualiserDateModification()
+  + Formulaire()
+  + Formulaire(epreuve: Epreuve, etudiants: List<Etudiant>, fraudes: List<Fraude>)
+  + ajouterEtudiant(e: Etudiant)
+  + ajouterFraude(f: Fraude)
+}
+
+' --- Hiérarchie des Fraudes ---
+abstract class Fraude {
+  - dateReleve : LocalDate
+  - description : String
+  - contenu : String
+  + Fraude()
+  + Fraude(dateReleve: LocalDate, description: String, contenu: String)
+}
+
+class FraudeIAG {
+  - nomService : String
+  + FraudeIAG()
+  + FraudeIAG(dateReleve: LocalDate, description: String, contenu: String, nomService: String)
+}
+
+class FraudePapier {
+  - dimensions : String
+  - estPlie : boolean
+  + FraudePapier()
+  + FraudePapier(dateReleve: LocalDate, description: String, contenu: String, dimensions: String, estPlie: boolean)
+}
+
+class FraudeCalculatrice {
+  - marque : String
+  - programme : String
+  + FraudeCalculatrice()
+  + FraudeCalculatrice(dateReleve: LocalDate, description: String, contenu: String, marque: String, programme: String)
+}
+
+class FraudeIAGConnectee {
+  - adresseIP : String
+  + FraudeIAGConnectee()
+  + FraudeIAGConnectee(dateReleve: LocalDate, description: String, contenu: String, nomService: String, adresseIP: String)
+}
+
+' --- Relations d'héritage ---
+Fraude <|-- FraudeIAG
+Fraude <|-- FraudePapier
+Fraude <|-- FraudeCalculatrice
+FraudeIAG <|-- FraudeIAGConnectee
+
+' --- Relations d'association et compositions ---
+Formulaire "1" --> "1" Epreuve : concerne >
+Formulaire "1" --> "1..*" Etudiant : implique >
+Formulaire "1" --> "1..*" Fraude : recense >
+
+Etudiant .> Cursus : utilise
+Epreuve .> Modalite : utilise
+
+@enduml
