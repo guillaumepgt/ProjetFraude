@@ -1,5 +1,4 @@
 @startuml
-skinparam style strictuml
 
 actor "Utilisateur\n(Gestionnaire)" as User
 participant "InterfaceTextuelle" as UI
