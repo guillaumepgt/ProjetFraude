@@ -9,27 +9,36 @@ public class Student {
     /**
      * Student's first name
      */
-    private String forename;
+    private String nom;
     /**
      * Student's last name
      */
-    private String surname;
+    private String prenom;
     /**
      * Unique student ID
      */
-    private int id;
+    private String numeroApprenant;
+
+
+    /** Creates a new Student with autocomplete information.
+     */
+    public Student() {
+        this.nom = "Peloin";
+        this.prenom = "Titouan";
+        this.numeroApprenant = "1";
+    }
 
     /**
-     * Creates a new Student with complete information including ID and username.
+     * Creates a new Student with complete information.
      *
-     * @param forename    The student's first name
-     * @param surname     The student's last name
-     * @param id          The student's unique ID
+     * @param nom    The student's first name
+     * @param prenom     The student's last name
+     * @param numeroApprenant   The student's unique ID
      */
-    public Student(String forename, String surname, int id) {
-        this.setForename(forename);
-        this.setSurname(surname);
-        this.setId(id);
+    public Student(String nom, String prenom, String numeroApprenant) {
+        this.setNom(nom);
+        this.setPrenom(prenom);
+        this.setId(numeroApprenant);
     }
 
     /**
@@ -37,17 +46,17 @@ public class Student {
      *
      * @return Student's forename
      */
-    public String getForename() {
-        return forename;
+    public String getNom() {
+        return nom;
     }
 
     /**
      * Sets the student's first name.
      *
-     * @param forename New forename to set
+     * @param nom New forename to set
      */
-    public void setForename(String forename) {
-        this.forename = forename;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     /**
@@ -55,17 +64,17 @@ public class Student {
      *
      * @return Student's surname
      */
-    public String getSurname() {
-        return surname;
+    public String getPrenom() {
+        return prenom;
     }
 
     /**
      * Sets the student's last name.
      *
-     * @param surname New surname to set
+     * @param prenom New surname to set
      */
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
     /**
@@ -73,17 +82,17 @@ public class Student {
      *
      * @return Student's unique ID
      */
-    public int getId() {
-        return id;
+    public String getId() {
+        return numeroApprenant;
     }
 
     /**
      * Sets the student's ID.
      *
-     * @param id New ID to set
+     * @param numeroApprenant New ID to set
      */
-    public void setId(int id) {
-        this.id = id;
+    public void setId(String numeroApprenant) {
+        this.numeroApprenant = numeroApprenant;
     }
 }
 
