@@ -1,33 +1,41 @@
-package fr.eseo.e3e.devlogiciel.student;
+package fr.eseo.e3e.devlogiciel.etudiant;
 
 /**
- * Represents a student enrolled in the school.
- * Contains personal information and identification details.
+ * Représente un étudiant inscrit dans l'école.
+ * Contient les informations personnelles et les détails d'identification.
  */
-public class Student {
+public class Etudiant {
 
+    /**
+     * Cursus de l'étudiant
+     */
     public enum Cursus {
         E1, E2, E3e, E3a, E4, E5
     }
 
     /**
-     * Student's first name
+     * Nom de l'étudiant
      */
     private String nom;
+
     /**
-     * Student's last name
+     * Prénom de l'étudiant
      */
     private String prenom;
+
     /**
-     * Unique student ID
+     * Numéro apprenant unique de l'étudiant
      */
     private String numeroApprenant;
 
+    /**
+     * Cursus de l'étudiant
+     */
     private Cursus cursus;
 
-    /** Creates a new Student with autocomplete information.
+    /** * Crée un nouvel étudiant avec des informations par défaut.
      */
-    public Student() {
+    public Etudiant() {
         this.nom = "Peloin";
         this.prenom = "Titouan";
         this.numeroApprenant = "1";
@@ -35,13 +43,14 @@ public class Student {
     }
 
     /**
-     * Creates a new Student with complete information.
+     * Crée un nouvel étudiant avec toutes ses informations.
      *
-     * @param nom    The student's first name
-     * @param prenom     The student's last name
-     * @param numeroApprenant   The student's unique ID
+     * @param nom               Le nom de l'étudiant
+     * @param prenom            Le prénom de l'étudiant
+     * @param numeroApprenant   Le numéro apprenant unique de l'étudiant
+     * @param cursus            Le cursus de l'étudiant
      */
-    public Student(String nom, String prenom, String numeroApprenant, Cursus cursus) {
+    public Etudiant(String nom, String prenom, String numeroApprenant, Cursus cursus) {
         this.setNom(nom);
         this.setPrenom(prenom);
         this.setId(numeroApprenant);
@@ -49,70 +58,74 @@ public class Student {
     }
 
     /**
-     * Gets the student's first name.
+     * Récupère le nom de l'étudiant.
      *
-     * @return Student's forename
+     * @return Le nom de l'étudiant
      */
     public String getNom() {
         return nom;
     }
 
     /**
-     * Sets the student's first name.
+     * Définit le nom de l'étudiant.
      *
-     * @param nom New forename to set
+     * @param nom Le nouveau nom à définir
      */
     public void setNom(String nom) {
         this.nom = nom;
     }
 
     /**
-     * Gets the student's last name.
+     * Récupère le prénom de l'étudiant.
      *
-     * @return Student's surname
+     * @return Le prénom de l'étudiant
      */
     public String getPrenom() {
         return prenom;
     }
 
     /**
-     * Sets the student's last name.
+     * Définit le prénom de l'étudiant.
      *
-     * @param prenom New surname to set
+     * @param prenom Le nouveau prénom à définir
      */
     public void setPrenom(String prenom) {
         this.prenom = prenom;
     }
 
     /**
-     * Gets the student's ID.
+     * Récupère le numéro apprenant de l'étudiant.
      *
-     * @return Student's unique ID
+     * @return Le numéro apprenant unique de l'étudiant
      */
     public String getId() {
         return numeroApprenant;
     }
 
     /**
-     * Sets the student's ID.
+     * Définit le numéro apprenant de l'étudiant.
      *
-     * @param numeroApprenant New ID to set
+     * @param numeroApprenant Le nouveau numéro apprenant à définir
      */
     public void setId(String numeroApprenant) {
         this.numeroApprenant = numeroApprenant;
     }
 
     /**
-     * Gets the student's cursus
+     * Récupère le cursus de l'étudiant.
      *
-     * @return Student's cursus
+     * @return Le cursus de l'étudiant
      */
-    public Cursus getCursus() { return this.cursus;}
+    public Cursus getCursus() {
+        return this.cursus;
+    }
 
     /**
-     * Sets the student's cursus
-     * @param cursus New cursus to set
+     * Définit le cursus de l'étudiant.
+     *
+     * @param cursus Le nouveau cursus à définir
      */
-    public void setCursus(Cursus cursus) {this.cursus = cursus;}
+    public void setCursus(Cursus cursus) {
+        this.cursus = cursus;
+    }
 }
-

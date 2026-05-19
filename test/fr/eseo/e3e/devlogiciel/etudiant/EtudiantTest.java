@@ -1,35 +1,35 @@
-package fr.eseo.e3e.devlogiciel.student;
+package fr.eseo.e3e.devlogiciel.etudiant;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static fr.eseo.e3e.devlogiciel.student.Student.Cursus.*;
+import static fr.eseo.e3e.devlogiciel.etudiant.Etudiant.Cursus.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StudentTest {
+public class EtudiantTest {
 
-    private Student student;
-    private Student student2;
+    private Etudiant etudiant;
+    private Etudiant etudiant2;
 
     @BeforeEach
     void setUp() {
-        student = new Student();
-        student2 = new Student("Maude", "Marius", "2", E2);
+        etudiant = new Etudiant();
+        etudiant2 = new Etudiant("Maude", "Marius", "2", E2);
     }
 
     @Test
     public void testConstructeur() {
-        assertEquals("Titouan", student.getPrenom());
-        assertEquals("Peloin", student.getNom());
-        assertEquals("1", student.getId());
-        assertEquals(E3e, student.getCursus());
+        assertEquals("Titouan", etudiant.getPrenom());
+        assertEquals("Peloin", etudiant.getNom());
+        assertEquals("1", etudiant.getId());
+        assertEquals(E3e, etudiant.getCursus());
     }
 
     @Test
     public void testConstructeur2() {
-        assertEquals("Marius", student2.getPrenom());
-        assertEquals("Maude", student2.getNom());
-        assertEquals("2", student2.getId());
-        assertEquals(E2, student2.getCursus());
+        assertEquals("Marius", etudiant2.getPrenom());
+        assertEquals("Maude", etudiant2.getNom());
+        assertEquals("2", etudiant2.getId());
+        assertEquals(E2, etudiant2.getCursus());
     }
 }
