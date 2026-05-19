@@ -6,6 +6,10 @@ package fr.eseo.e3e.devlogiciel.student;
  */
 public class Student {
 
+    public enum Cursus {
+        E1, E2, E3e, E3a, E4, E5
+    }
+
     /**
      * Student's first name
      */
@@ -19,6 +23,7 @@ public class Student {
      */
     private String numeroApprenant;
 
+    private Cursus cursus;
 
     /** Creates a new Student with autocomplete information.
      */
@@ -26,6 +31,7 @@ public class Student {
         this.nom = "Peloin";
         this.prenom = "Titouan";
         this.numeroApprenant = "1";
+        this.cursus = Cursus.E3e;
     }
 
     /**
@@ -35,10 +41,11 @@ public class Student {
      * @param prenom     The student's last name
      * @param numeroApprenant   The student's unique ID
      */
-    public Student(String nom, String prenom, String numeroApprenant) {
+    public Student(String nom, String prenom, String numeroApprenant, Cursus cursus) {
         this.setNom(nom);
         this.setPrenom(prenom);
         this.setId(numeroApprenant);
+        this.setCursus(cursus);
     }
 
     /**
@@ -94,5 +101,18 @@ public class Student {
     public void setId(String numeroApprenant) {
         this.numeroApprenant = numeroApprenant;
     }
+
+    /**
+     * Gets the student's cursus
+     *
+     * @return Student's cursus
+     */
+    public Cursus getCursus() { return this.cursus;}
+
+    /**
+     * Sets the student's cursus
+     * @param cursus New cursus to set
+     */
+    public void setCursus(Cursus cursus) {this.cursus = cursus;}
 }
 
