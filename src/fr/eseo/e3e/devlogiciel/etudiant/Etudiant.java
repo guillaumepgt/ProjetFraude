@@ -33,7 +33,8 @@ public class Etudiant {
      */
     private Cursus cursus;
 
-    /** * Crée un nouvel étudiant avec des informations par défaut.
+    /**
+     * Crée un nouvel étudiant avec des informations par défaut.
      */
     public Etudiant() {
         this.nom = "Peloin";
