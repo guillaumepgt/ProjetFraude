@@ -1,0 +1,61 @@
+@startuml
+
+actor "Utilisateur\n(Gestionnaire)" as User
+participant "InterfaceTextuelle" as UI
+participant "SystemeGestion" as Sys
+participant "form: Formulaire" as Form
+
+User -> UI : 1. Sélectionner "Ajouter un formulaire"
+activate UI
+
+UI -> Sys : recupererEpreuvesDisponibles()
+activate Sys
+Sys --> UI : listeEpreuves
+deactivate Sys
+
+UI --> User : Afficher liste des épreuves
+User -> UI : Sélectionner une épreuve
+UI -> Form ** : creerFormulaire(epreuve)
+
+loop Pour chaque étudiant impliqué
+    UI --> User : Demander informations étudiant (nom, prénom, n°, cursus)
+    User -> UI : Saisir (nom, prénom, numeroApprenant, cursus)
+    UI -> Sys : trouverOuCreerEtudiant(numeroApprenant)
+    activate Sys
+    Sys --> UI : etudiant
+    deactivate Sys
+    UI -> Form : ajouterEtudiant(etudiant)
+    activate Form
+    Form --> UI : ok
+    deactivate Form
+end
+
+loop Pour chaque fraude constatée
+    UI --> User : Demander informations fraude (type, description, contenu, attributs spécifiques)
+    User -> UI : Saisir informations fraude
+
+    alt type == IAG
+        UI -> UI : creerFraudeIAG(...)
+    else type == Papier
+        UI -> UI : creerFraudePapier(...)
+    else type == Calculatrice
+        UI -> UI : creerFraudeCalculatrice(...)
+    else type == IAG Connectée
+        UI -> UI : creerFraudeIAGConnectee(...)
+    end
+
+    UI -> Form : ajouterFraude(fraude)
+    activate Form
+    Form --> UI : ok
+    deactivate Form
+end
+
+UI -> Sys : enregistrerFormulaire(form)
+activate Sys
+Sys --> UI : confirmation
+deactivate Sys
+
+UI --> User : Afficher confirmation d'ajout
+deactivate UI
+
+@enduml
