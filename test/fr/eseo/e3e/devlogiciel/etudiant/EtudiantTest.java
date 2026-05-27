@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import static fr.eseo.e3e.devlogiciel.etudiant.Etudiant.Cursus.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Classe de test pour la classe Etudiant.
+ */
 public class EtudiantTest {
 
     private Etudiant etudiant;
@@ -17,6 +20,7 @@ public class EtudiantTest {
         etudiant2 = new Etudiant("Maude", "Marius", "2", E2);
     }
 
+    /** Test du constructeur par défaut */
     @Test
     public void testConstructeur() {
         assertEquals("Titouan", etudiant.getPrenom());
@@ -25,6 +29,7 @@ public class EtudiantTest {
         assertEquals(E3e, etudiant.getCursus());
     }
 
+    /** Test du constructeur avec paramètres */
     @Test
     public void testConstructeur2() {
         assertEquals("Marius", etudiant2.getPrenom());

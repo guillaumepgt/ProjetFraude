@@ -7,6 +7,9 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Classe de test pour la classe FraudeIAG.
+ */
 public class FraudeIAGTest {
     private FraudeIAG fraude1;
     private FraudeIAG fraude2;

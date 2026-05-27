@@ -2,6 +2,9 @@ package fr.eseo.e3e.devlogiciel.fraude;
 
 import java.time.LocalDate;
 
+/**
+ * Représente une fraude utilisant une calculatrice.
+ */
 public class FraudeCalculatrice extends Fraude{
 
     /**

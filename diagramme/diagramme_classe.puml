@@ -70,12 +70,13 @@ class SystemeGestion {
 class JournalHistorique {
   - entrees : List<EntreeHistorique>
   + ajouterEntree(description: String)
+  + exporterEnTexte(cheminFichier: String)
 }
 
 class EntreeHistorique {
   - horodatage : LocalDateTime
   - action : String
-  + EntreeHistorique(action: String)
+  + entreeHistorique(action: String)
 }
 
 ' --- Hiérarchie des Fraudes ---

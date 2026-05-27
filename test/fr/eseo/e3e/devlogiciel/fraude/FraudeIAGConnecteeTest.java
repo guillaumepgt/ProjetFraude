@@ -7,6 +7,9 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de test pour la classe FraudeIAGConnectee.
+ */
 public class FraudeIAGConnecteeTest {
 
     private FraudeIAGConnectee fraude1;

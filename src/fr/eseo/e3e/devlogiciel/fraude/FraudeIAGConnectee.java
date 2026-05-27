@@ -21,6 +21,15 @@ public class FraudeIAGConnectee extends FraudeIAG {
         this.adresseIP = "127.0.0.1";
     }
 
+    /**
+     * Crée une nouvelle fraude IAG connectée avec toutes les informations spécifiées.
+     *
+     * @param dateReleve   La date de la fraude
+     * @param description  La description de la fraude
+     * @param contenu      Le contenu de la fraude
+     * @param nomService   Le nom du service IAG utilisé
+     * @param adresseIP    L'adresse IP utilisée pour la fraude
+     */
     public FraudeIAGConnectee(LocalDate dateReleve, String description, String contenu, String nomService, String adresseIP) {
         super(dateReleve, description, contenu, nomService);
         this.setAdresseIP(adresseIP);
