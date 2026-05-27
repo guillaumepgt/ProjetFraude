@@ -10,7 +10,12 @@ public class Etudiant {
      * Cursus de l'étudiant
      */
     public enum Cursus {
-        E1, E2, E3e, E3a, E4, E5
+        /** Année E1 */ E1,
+        /** Année E2 */ E2,
+        /** Année E3e */ E3e,
+        /** Année E3a */ E3a,
+        /** Année E4 */ E4,
+        /** Année E5 */ E5
     }
 
     /**
@@ -33,7 +38,8 @@ public class Etudiant {
      */
     private Cursus cursus;
 
-    /** * Crée un nouvel étudiant avec des informations par défaut.
+    /**
+     * Crée un nouvel étudiant avec des informations par défaut.
      */
     public Etudiant() {
         this.nom = "Peloin";
