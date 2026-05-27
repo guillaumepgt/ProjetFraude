@@ -1,0 +1,36 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+
+' --- Énumérations ---
+enum Cursus
+enum Modalite
+
+' --- Classes Principales ---
+class Formulaire
+class Epreuve
+class Etudiant
+
+' --- Hiérarchie des Fraudes ---
+abstract class Fraude
+class FraudeIAG
+class FraudePapier
+class FraudeCalculatrice
+class FraudeIAGConnectee
+
+' --- Relations d'héritage ---
+Fraude <|-- FraudeIAG
+Fraude <|-- FraudePapier
+Fraude <|-- FraudeCalculatrice
+FraudeIAG <|-- FraudeIAGConnectee
+
+' --- Relations d'association ---
+Formulaire "1" --> "1" Epreuve : concerne >
+Formulaire "1" --> "1..*" Etudiant : implique >
+Formulaire "1" --> "1..*" Fraude : recense >
+
+Etudiant .> Cursus
+Epreuve .> Modalite
+
+@enduml

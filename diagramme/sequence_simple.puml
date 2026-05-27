@@ -1,0 +1,22 @@
+@startuml
+actor "Utilisateur\n(Gestionnaire)" as User
+participant "InterfaceTextuelle" as UI
+participant "SystemeGestion" as Sys
+participant "form: Formulaire" as Form
+
+User -> UI : Demander l'ajout d'un formulaire\n(saisie de l'épreuve, étudiants et fraudes)
+activate UI
+
+UI -> Form ** : instancierFormulaire(epreuve)
+
+UI -> Form : lierEtudiants(...)
+UI -> Form : lierFraudes(...)
+
+UI -> Sys : enregistrerFormulaire(form)
+activate Sys
+Sys --> UI : confirmationEnregistrement
+deactivate Sys
+
+UI --> User : Afficher le succès de l'opération
+deactivate UI
+@enduml
