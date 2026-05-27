@@ -49,11 +49,33 @@ class Formulaire {
   - epreuve : Epreuve
   - etudiants : List<Etudiant>
   - fraudes : List<Fraude>
-  -actualiserDateModification()
+  - actualiserDateModification()
   + Formulaire()
   + Formulaire(epreuve: Epreuve, etudiants: List<Etudiant>, fraudes: List<Fraude>)
   + ajouterEtudiant(e: Etudiant)
   + ajouterFraude(f: Fraude)
+}
+
+' --- Système de Gestion et Traçabilité ---
+class SystemeGestion {
+  - formulaires : List<Formulaire>
+  - etudiants : List<Etudiant>
+  - journal : JournalHistorique
+  + enregistrerFormulaire(f: Formulaire)
+  + supprimerFormulaire(id: int)
+  + rechercheCroisee(cursus: Cursus, typeFraude: Class): List<Formulaire>
+  + consulterHistorique(): List<EntreeHistorique>
+}
+
+class JournalHistorique {
+  - entrees : List<EntreeHistorique>
+  + ajouterEntree(description: String)
+}
+
+class EntreeHistorique {
+  - horodatage : LocalDateTime
+  - action : String
+  + EntreeHistorique(action: String)
 }
 
 ' --- Hiérarchie des Fraudes ---
@@ -68,41 +90,36 @@ abstract class Fraude {
 class FraudeIAG {
   - nomService : String
   + FraudeIAG()
-  + FraudeIAG(dateReleve: LocalDate, description: String, contenu: String, nomService: String)
 }
 
 class FraudePapier {
   - dimensions : String
   - estPlie : boolean
-  + FraudePapier()
-  + FraudePapier(dateReleve: LocalDate, description: String, contenu: String, dimensions: String, estPlie: boolean)
 }
 
 class FraudeCalculatrice {
   - marque : String
   - programme : String
-  + FraudeCalculatrice()
-  + FraudeCalculatrice(dateReleve: LocalDate, description: String, contenu: String, marque: String, programme: String)
 }
 
 class FraudeIAGConnectee {
   - adresseIP : String
-  + FraudeIAGConnectee()
-  + FraudeIAGConnectee(dateReleve: LocalDate, description: String, contenu: String, nomService: String, adresseIP: String)
 }
 
-' --- Relations d'héritage ---
+' --- Relations ---
 Fraude <|-- FraudeIAG
 Fraude <|-- FraudePapier
 Fraude <|-- FraudeCalculatrice
 FraudeIAG <|-- FraudeIAGConnectee
 
-' --- Relations d'association et compositions ---
+SystemeGestion "1" *-- "1" JournalHistorique : possède >
+JournalHistorique "1" *-- "*" EntreeHistorique : contient >
+SystemeGestion "1" o-- "*" Formulaire : gère >
+
 Formulaire "1" --> "1" Epreuve : concerne >
 Formulaire "1" --> "1..*" Etudiant : implique >
 Formulaire "1" --> "1..*" Fraude : recense >
 
 Etudiant .> Cursus : utilise
 Epreuve .> Modalite : utilise
-
 @enduml
