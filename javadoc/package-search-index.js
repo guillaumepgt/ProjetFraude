@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"fr.eseo.e3e.devlogiciel.etudiant"},{"l":"fr.eseo.e3e.devlogiciel.fraude"}];updateSearchResults();
