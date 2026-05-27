@@ -1,35 +1,77 @@
 package fr.eseo.e3e.devlogiciel.formulaire;
 
+import fr.eseo.e3e.devlogiciel.epreuve.Epreuve;
+import fr.eseo.e3e.devlogiciel.etudiant.Etudiant;
+import fr.eseo.e3e.devlogiciel.fraude.Fraude;
+import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FormulaireTest {
+class FormulaireTest {
 
-    private Formulaire formulaire;
-    private Formulaire formulaire2;
+    @Test
+    void testConstructeurParDefaut() {
+        Formulaire form = new Formulaire();
 
-    @org.junit.jupiter.api.BeforeEach
-    void setUp() {
-        formulaire=new Formulaire();
-        formulaire2=new Formulaire(12,)
+        assertTrue(form.getId() > 0);
+        assertNotNull(form.getDateCreation());
+        assertEquals(form.getDateCreation(), form.getDateDerniereModification());
+        assertNull(form.getEpreuve());
+        assertNotNull(form.getEtudiants());
+        assertTrue(form.getEtudiants().isEmpty());
+        assertNotNull(form.getFraudes());
+        assertTrue(form.getFraudes().isEmpty());
     }
 
-    @org.junit.jupiter.api.AfterEach
-    void tearDown() {
+    @Test
+    void testConstructeurParametre() {
+        LocalDateTime dateC = LocalDateTime.of(2026, 5, 27, 10, 0);
+        LocalDateTime dateM = LocalDateTime.of(2026, 5, 27, 12, 0);
+        Epreuve epreuve = new Epreuve();
+        List<Etudiant> etudiants = new ArrayList<>();
+        List<Fraude> fraudes = new ArrayList<>();
+
+        Formulaire form = new Formulaire(10, dateC, dateM, epreuve, etudiants, fraudes);
+
+        assertEquals(10, form.getId());
+        assertEquals(dateC, form.getDateCreation());
+        assertEquals(dateM, form.getDateDerniereModification());
+        assertEquals(epreuve, form.getEpreuve());
+        assertEquals(etudiants, form.getEtudiants());
+        assertEquals(fraudes, form.getFraudes());
     }
 
-    @org.junit.jupiter.api.Test
-    void formulaire() {
+    @Test
+    void testAjouterEtudiant() throws InterruptedException {
+        Formulaire form = new Formulaire();
+        LocalDateTime dateAvant = form.getDateDerniereModification();
+
+        Thread.sleep(10);
+
+        Etudiant etudiant = new Etudiant();
+        form.ajouterEtudiant(etudiant);
+
+        assertEquals(1, form.getEtudiants().size());
+        assertEquals(etudiant, form.getEtudiants().get(0));
+        assertTrue(form.getDateDerniereModification().isAfter(dateAvant));
     }
 
-    @org.junit.jupiter.api.Test
-    void testFormulaire() {
-    }
+    @Test
+    void testAjouterFraude() throws InterruptedException {
+        Formulaire form = new Formulaire();
+        LocalDateTime dateAvant = form.getDateDerniereModification();
 
-    @org.junit.jupiter.api.Test
-    void ajouterEtudiant() {
-    }
+        Thread.sleep(10);
 
-    @org.junit.jupiter.api.Test
-    void ajouterFraude() {
+        Fraude fraude = new Fraude() {};
+        form.ajouterFraude(fraude);
+
+        assertEquals(1, form.getFraudes().size());
+        assertEquals(fraude, form.getFraudes().get(0));
+        assertTrue(form.getDateDerniereModification().isAfter(dateAvant));
     }
 }
