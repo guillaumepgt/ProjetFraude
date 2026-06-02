@@ -57,7 +57,6 @@ public class JournalHistorique {
                 writer.write(entree.getHorodatage() + " - " + entree.getAction());
                 writer.newLine();
             }
-            System.out.println("Journal exporté en texte !");
         } catch (IOException e) {
             e.printStackTrace();
         }
