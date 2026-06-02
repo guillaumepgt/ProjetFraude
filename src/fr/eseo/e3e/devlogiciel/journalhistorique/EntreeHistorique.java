@@ -1,11 +1,13 @@
 package fr.eseo.e3e.devlogiciel.journalhistorique;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * Représente une entrée (une action tracée) dans le journal d'historique du système.
  */
-public class EntreeHistorique {
+public class EntreeHistorique implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Date et heure à laquelle l'action a été effectuée.

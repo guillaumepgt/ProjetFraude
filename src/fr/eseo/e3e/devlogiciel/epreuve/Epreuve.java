@@ -1,9 +1,11 @@
 package fr.eseo.e3e.devlogiciel.epreuve;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Epreuve {
+public class Epreuve implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     public enum Modalite {
         EXAMEN_ECRIT, ORAL, QCM, SUR_ORDINATEUR, PROJET, TP

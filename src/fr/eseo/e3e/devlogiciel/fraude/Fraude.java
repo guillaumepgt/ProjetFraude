@@ -1,12 +1,14 @@
 package fr.eseo.e3e.devlogiciel.fraude;
 
 import java.time.LocalDate;
+import java.io.Serializable;
 
 /**
  * Représente une fraude lors d'une épreuve
  * Contient les informations de la fraude et des preuves
  */
-public abstract class Fraude {
+public abstract class Fraude implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Date de la fraude

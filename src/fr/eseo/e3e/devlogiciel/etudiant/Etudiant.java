@@ -1,10 +1,14 @@
 package fr.eseo.e3e.devlogiciel.etudiant;
 
+
+import java.io.Serializable;
+
 /**
  * Représente un étudiant inscrit dans l'école.
  * Contient les informations personnelles et les détails d'identification.
  */
-public class Etudiant {
+public class Etudiant implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Cursus de l'étudiant

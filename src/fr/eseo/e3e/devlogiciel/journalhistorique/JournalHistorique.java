@@ -3,13 +3,15 @@ package fr.eseo.e3e.devlogiciel.journalhistorique;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Représente le journal d'historique contenant toutes les traces du système.
  */
-public class JournalHistorique {
+public class JournalHistorique implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Liste des entrées contenues dans l'historique.

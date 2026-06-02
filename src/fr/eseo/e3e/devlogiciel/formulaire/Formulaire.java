@@ -4,14 +4,17 @@ import fr.eseo.e3e.devlogiciel.epreuve.Epreuve;
 import fr.eseo.e3e.devlogiciel.etudiant.Etudiant;
 import fr.eseo.e3e.devlogiciel.fraude.Fraude;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
 /**
  * Représente un formulaire de relevé de fraudes lors d'une épreuve.
  */
-public class Formulaire {
+public class Formulaire implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static int compteurId = 0;
     private final int id;
     private final LocalDateTime dateCreation;
