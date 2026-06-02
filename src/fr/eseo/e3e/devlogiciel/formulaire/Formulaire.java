@@ -59,7 +59,7 @@ public class Formulaire implements Serializable {
     }
 
     /**
-     * Ajoute un étudiant au formulaire.
+     * Ajoute un étudiant au formulaire
      *
      * @param etudiant L'étudiant à ajouter
      */
@@ -97,7 +97,7 @@ public class Formulaire implements Serializable {
     }
 
     /**
-     * Récupère la liste des étudiants impliqués.
+     * Récupère la liste des étudiants impliqués
      *
      * @return La liste des étudiants
      */
