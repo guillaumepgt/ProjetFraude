@@ -3,11 +3,9 @@ skinparam classAttributeIconSize 0
 skinparam monochrome true
 skinparam shadowing false
 
-' --- Interfaces natives ---
-interface Serializable
 
 package "fr.eseo.e3e.devlogiciel.etudiant" {
-  enum Cursus implements Serializable {
+  enum Cursus {
     E1
     E2
     E3e
@@ -16,8 +14,7 @@ package "fr.eseo.e3e.devlogiciel.etudiant" {
     E5
   }
 
-  class Etudiant implements Serializable {
-    - {static} serialVersionUID : long = 1L
+  class Etudiant {
     - numeroApprenant : String
     - nom : String
     - prenom : String
@@ -28,7 +25,7 @@ package "fr.eseo.e3e.devlogiciel.etudiant" {
 }
 
 package "fr.eseo.e3e.devlogiciel.epreuve" {
-  enum Modalite implements Serializable {
+  enum Modalite {
     EXAMEN_ECRIT
     ORAL
     QCM
@@ -37,8 +34,7 @@ package "fr.eseo.e3e.devlogiciel.epreuve" {
     TP
   }
 
-  class Epreuve implements Serializable {
-    - {static} serialVersionUID : long = 1L
+  class Epreuve {
     - codeECUE : String
     - date : LocalDate
     - heurePassage : LocalTime
@@ -50,8 +46,7 @@ package "fr.eseo.e3e.devlogiciel.epreuve" {
 }
 
 package "fr.eseo.e3e.devlogiciel.formulaire" {
-  class Formulaire implements Serializable {
-    - {static} serialVersionUID : long = 1L
+  class Formulaire {
     - id : int
     - dateCreation : LocalDateTime
     - dateDerniereModification : LocalDateTime
@@ -67,15 +62,13 @@ package "fr.eseo.e3e.devlogiciel.formulaire" {
 }
 
 package "fr.eseo.e3e.devlogiciel.journalhistorique" {
-  class JournalHistorique implements Serializable {
-    - {static} serialVersionUID : long = 1L
+  class JournalHistorique {
     - entrees : List<EntreeHistorique>
     + ajouterEntree(description: String)
     + exporterEnTexte(cheminFichier: String)
   }
 
-  class EntreeHistorique implements Serializable {
-    - {static} serialVersionUID : long = 1L
+  class EntreeHistorique {
     - horodatage : LocalDateTime
     - action : String
     + entreeHistorique(action: String)
@@ -83,8 +76,7 @@ package "fr.eseo.e3e.devlogiciel.journalhistorique" {
 }
 
 package "fr.eseo.e3e.devlogiciel.fraude" {
-  abstract class Fraude implements Serializable {
-    - {static} serialVersionUID : long = 1L
+  abstract class Fraude {
     - dateReleve : LocalDate
     - description : String
     - contenu : String
@@ -113,8 +105,7 @@ package "fr.eseo.e3e.devlogiciel.fraude" {
 }
 
 package "fr.eseo.e3e.devlogiciel.systeme" {
-  class SystemeGestion implements Serializable {
-    - {static} serialVersionUID : long = 1L
+  class SystemeGestion {
     - formulaires : List<Formulaire>
     - etudiants : List<Etudiant>
     - journal : JournalHistorique
