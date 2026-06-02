@@ -3,108 +3,117 @@ skinparam classAttributeIconSize 0
 skinparam monochrome true
 skinparam shadowing false
 
-' --- Énumérations ---
-enum Cursus {
-  E1
-  E2
-  E3e
-  E3a
-  E4
-  E5
+package "fr.eseo.e3e.devlogiciel.etudiant" {
+  enum Cursus {
+    E1
+    E2
+    E3e
+    E3a
+    E4
+    E5
+  }
+
+  class Etudiant {
+    - numeroApprenant : String
+    - nom : String
+    - prenom : String
+    - cursus : Cursus
+    + Etudiant()
+    + Etudiant(numeroApprenant: String, nom: String, prenom: String, cursus: Cursus)
+  }
 }
 
-enum Modalite {
-  EXAMEN_ECRIT
-  ORAL
-  QCM
-  SUR_ORDINATEUR
-  PROJET
-  TP
+package "fr.eseo.e3e.devlogiciel.epreuve" {
+  enum Modalite {
+    EXAMEN_ECRIT
+    ORAL
+    QCM
+    SUR_ORDINATEUR
+    PROJET
+    TP
+  }
+
+  class Epreuve {
+    - codeECUE : String
+    - date : LocalDate
+    - heurePassage : LocalTime
+    - duree : int
+    - modalite : Modalite
+    + Epreuve()
+    + Epreuve(codeECUE: String, date: LocalDate, heurePassage: LocalTime, duree: int, modalite: Modalite)
+  }
 }
 
-' --- Classes du domaine ---
-class Etudiant {
-  - numeroApprenant : String
-  - nom : String
-  - prenom : String
-  - cursus : Cursus
-  + Etudiant()
-  + Etudiant(numeroApprenant: String, nom: String, prenom: String, cursus: Cursus)
+package "fr.eseo.e3e.devlogiciel.formulaire" {
+  class Formulaire {
+    - id : int
+    - dateCreation : LocalDateTime
+    - dateDerniereModification : LocalDateTime
+    - epreuve : Epreuve
+    - etudiants : List<Etudiant>
+    - fraudes : List<Fraude>
+    - actualiserDateModification()
+    + Formulaire()
+    + Formulaire(epreuve: Epreuve, etudiants: List<Etudiant>, fraudes: List<Fraude>)
+    + ajouterEtudiant(e: Etudiant)
+    + ajouterFraude(f: Fraude)
+  }
 }
 
-class Epreuve {
-  - codeECUE : String
-  - date : LocalDate
-  - heurePassage : LocalTime
-  - duree : int
-  - modalite : Modalite
-  + Epreuve()
-  + Epreuve(codeECUE: String, date: LocalDate, heurePassage: LocalTime, duree: int, modalite: Modalite)
+package "fr.eseo.e3e.devlogiciel.journalhistorique" {
+  class JournalHistorique {
+    - entrees : List<EntreeHistorique>
+    + ajouterEntree(description: String)
+    + exporterEnTexte(cheminFichier: String)
+  }
+
+  class EntreeHistorique {
+    - horodatage : LocalDateTime
+    - action : String
+    + entreeHistorique(action: String)
+  }
 }
 
-class Formulaire {
-  - id : int
-  - dateCreation : LocalDateTime
-  - dateDerniereModification : LocalDateTime
-  - epreuve : Epreuve
-  - etudiants : List<Etudiant>
-  - fraudes : List<Fraude>
-  - actualiserDateModification()
-  + Formulaire()
-  + Formulaire(epreuve: Epreuve, etudiants: List<Etudiant>, fraudes: List<Fraude>)
-  + ajouterEtudiant(e: Etudiant)
-  + ajouterFraude(f: Fraude)
+package "fr.eseo.e3e.devlogiciel.fraude" {
+  abstract class Fraude {
+    - dateReleve : LocalDate
+    - description : String
+    - contenu : String
+    + Fraude()
+    + Fraude(dateReleve: LocalDate, description: String, contenu: String)
+  }
+
+  class FraudeIAG {
+    - nomService : String
+    + FraudeIAG()
+  }
+
+  class FraudePapier {
+    - dimensions : String
+    - estPlie : boolean
+  }
+
+  class FraudeCalculatrice {
+    - marque : String
+    - programme : String
+  }
+
+  class FraudeIAGConnectee {
+    - adresseIP : String
+  }
 }
 
-' --- Système de Gestion et Traçabilité ---
-class SystemeGestion {
-  - formulaires : List<Formulaire>
-  - etudiants : List<Etudiant>
-  - journal : JournalHistorique
-  + enregistrerFormulaire(f: Formulaire)
-  + supprimerFormulaire(id: int)
-  + rechercheCroisee(cursus: Cursus, typeFraude: Class): List<Formulaire>
-  + consulterHistorique(): List<EntreeHistorique>
-}
-
-class JournalHistorique {
-  - entrees : List<EntreeHistorique>
-  + ajouterEntree(description: String)
-  + exporterEnTexte(cheminFichier: String)
-}
-
-class EntreeHistorique {
-  - horodatage : LocalDateTime
-  - action : String
-  + entreeHistorique(action: String)
-}
-
-' --- Hiérarchie des Fraudes ---
-abstract class Fraude {
-  - dateReleve : LocalDate
-  - description : String
-  - contenu : String
-  + Fraude()
-  + Fraude(dateReleve: LocalDate, description: String, contenu: String)
-}
-
-class FraudeIAG {
-  - nomService : String
-  + FraudeIAG()
-}
-
-class FraudePapier {
-  - dimensions : String
-  - estPlie : boolean
-}
-
-class FraudeCalculatrice {
-  - marque : String
-  - programme : String
-}
-
-class FraudeIAGConnectee {
-  - adresseIP : String
+package "fr.eseo.e3e.devlogiciel" {
+  ' --- Système de Gestion et Traçabilité ---
+  class SystemeGestion {
+    - formulaires : List<Formulaire>
+    - etudiants : List<Etudiant>
+    - journal : JournalHistorique
+    + enregistrerFormulaire(f: Formulaire)
+    + supprimerFormulaire(id: int)
+    + rechercheCroisee(cursus: Cursus, typeFraude: Class): List<Formulaire>
+    + consulterHistorique(): List<EntreeHistorique>
+  }
 }
 
 ' --- Relations ---
