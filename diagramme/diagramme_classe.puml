@@ -3,8 +3,11 @@ skinparam classAttributeIconSize 0
 skinparam monochrome true
 skinparam shadowing false
 
+' --- Interfaces natives ---
+interface Serializable
+
 package "fr.eseo.e3e.devlogiciel.etudiant" {
-  enum Cursus {
+  enum Cursus implements Serializable {
     E1
     E2
     E3e
@@ -13,7 +16,8 @@ package "fr.eseo.e3e.devlogiciel.etudiant" {
     E5
   }
 
-  class Etudiant {
+  class Etudiant implements Serializable {
+    - {static} serialVersionUID : long = 1L
     - numeroApprenant : String
     - nom : String
     - prenom : String
@@ -24,7 +28,7 @@ package "fr.eseo.e3e.devlogiciel.etudiant" {
 }
 
 package "fr.eseo.e3e.devlogiciel.epreuve" {
-  enum Modalite {
+  enum Modalite implements Serializable {
     EXAMEN_ECRIT
     ORAL
     QCM
@@ -33,7 +37,8 @@ package "fr.eseo.e3e.devlogiciel.epreuve" {
     TP
   }
 
-  class Epreuve {
+  class Epreuve implements Serializable {
+    - {static} serialVersionUID : long = 1L
     - codeECUE : String
     - date : LocalDate
     - heurePassage : LocalTime
@@ -45,7 +50,8 @@ package "fr.eseo.e3e.devlogiciel.epreuve" {
 }
 
 package "fr.eseo.e3e.devlogiciel.formulaire" {
-  class Formulaire {
+  class Formulaire implements Serializable {
+    - {static} serialVersionUID : long = 1L
     - id : int
     - dateCreation : LocalDateTime
     - dateDerniereModification : LocalDateTime
@@ -61,13 +67,15 @@ package "fr.eseo.e3e.devlogiciel.formulaire" {
 }
 
 package "fr.eseo.e3e.devlogiciel.journalhistorique" {
-  class JournalHistorique {
+  class JournalHistorique implements Serializable {
+    - {static} serialVersionUID : long = 1L
     - entrees : List<EntreeHistorique>
     + ajouterEntree(description: String)
     + exporterEnTexte(cheminFichier: String)
   }
 
-  class EntreeHistorique {
+  class EntreeHistorique implements Serializable {
+    - {static} serialVersionUID : long = 1L
     - horodatage : LocalDateTime
     - action : String
     + entreeHistorique(action: String)
@@ -75,7 +83,8 @@ package "fr.eseo.e3e.devlogiciel.journalhistorique" {
 }
 
 package "fr.eseo.e3e.devlogiciel.fraude" {
-  abstract class Fraude {
+  abstract class Fraude implements Serializable {
+    - {static} serialVersionUID : long = 1L
     - dateReleve : LocalDate
     - description : String
     - contenu : String
@@ -103,25 +112,52 @@ package "fr.eseo.e3e.devlogiciel.fraude" {
   }
 }
 
-package "fr.eseo.e3e.devlogiciel" {
-  ' --- Système de Gestion et Traçabilité ---
-  class SystemeGestion {
+package "fr.eseo.e3e.devlogiciel.systeme" {
+  class SystemeGestion implements Serializable {
+    - {static} serialVersionUID : long = 1L
     - formulaires : List<Formulaire>
     - etudiants : List<Etudiant>
     - journal : JournalHistorique
+    + SystemeGestion()
     + enregistrerFormulaire(f: Formulaire)
     + supprimerFormulaire(id: int)
     + rechercheCroisee(cursus: Cursus, typeFraude: Class): List<Formulaire>
     + consulterHistorique(): List<EntreeHistorique>
+    + sauvegarder(cheminFichier: String)
+    + {static} charger(cheminFichier: String): SystemeGestion
   }
 }
 
-' --- Relations ---
+package "fr.eseo.e3e.devlogiciel.ui" {
+  class ConsoleUI {
+    - scanner : Scanner
+    - systeme : SystemeGestion
+    + ConsoleUI(systeme: SystemeGestion)
+    + demarrer()
+    - afficherMenuPrincipal()
+    - saisirNouveauFormulaire()
+    - actionSupprimerFormulaire()
+    - afficherTousLesFormulaires()
+    - actionRechercheCroisee()
+    - afficherJournalHistorique()
+  }
+}
+
+package "fr.eseo.e3e.devlogiciel" {
+  class Main {
+    - {static} FICHIER_DATA : String
+    - {static} CHEMIN_LOGS : String
+    + {static} main(args: String[])
+  }
+}
+
+' --- Relations d'héritage ---
 Fraude <|-- FraudeIAG
 Fraude <|-- FraudePapier
 Fraude <|-- FraudeCalculatrice
 FraudeIAG <|-- FraudeIAGConnectee
 
+' --- Relations d'association et composition ---
 SystemeGestion "1" *-- "1" JournalHistorique : possède >
 JournalHistorique "1" *-- "*" EntreeHistorique : contient >
 SystemeGestion "1" o-- "*" Formulaire : gère >
@@ -132,4 +168,10 @@ Formulaire "1" --> "1..*" Fraude : recense >
 
 Etudiant .> Cursus : utilise
 Epreuve .> Modalite : utilise
+
+' --- Relations pour l'architecture UI/Main ---
+Main ..> SystemeGestion : initialise >
+Main ..> ConsoleUI : lance >
+ConsoleUI "1" --> "1" SystemeGestion : interagit avec >
+
 @enduml
