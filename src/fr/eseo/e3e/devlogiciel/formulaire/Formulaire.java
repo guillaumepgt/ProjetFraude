@@ -56,7 +56,7 @@ public class Formulaire {
     }
 
     /**
-     * Ajoute un étudiant au formulaire.
+     * Ajoute un étudiant au formulaire
      *
      * @param etudiant L'étudiant à ajouter
      */
@@ -94,7 +94,7 @@ public class Formulaire {
     }
 
     /**
-     * Récupère la liste des étudiants impliqués.
+     * Récupère la liste des étudiants impliqués
      *
      * @return La liste des étudiants
      */
