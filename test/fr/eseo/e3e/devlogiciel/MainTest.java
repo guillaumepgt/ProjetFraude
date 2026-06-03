@@ -45,7 +45,7 @@ public class MainTest {
 
     @Test
     public void testMainEtQuitterImmediat() {
-        simulerEntreeMenu("6\n");
+        simulerEntreeMenu("7\n");
 
         assertDoesNotThrow(() -> Main.main(new String[]{}));
     }

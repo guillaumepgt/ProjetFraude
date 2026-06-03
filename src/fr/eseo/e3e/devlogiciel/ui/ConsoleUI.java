@@ -52,6 +52,9 @@ public class ConsoleUI {
                     afficherJournalHistorique();
                     break;
                 case "6":
+                    actionAnalyserReseau();
+                    break;
+                case "7":
                     quitter = true;
                     System.out.println("Fermeture de l'application.");
                     break;
@@ -69,7 +72,8 @@ public class ConsoleUI {
         System.out.println("3. Afficher la liste des dossiers");
         System.out.println("4. Recherche croisee (Cursus + Type)");
         System.out.println("5. Afficher les logs du systeme");
-        System.out.println("6. Quitter");
+        System.out.println("6. Analyser le réseau de tricheurs (Graphe)");
+        System.out.println("7. Quitter");
         System.out.print("Votre choix : ");
     }
 
@@ -111,17 +115,26 @@ public class ConsoleUI {
         Epreuve.Modalite modalite = selectionnerModalite();
         Epreuve epreuve = new Epreuve(code, dateEpreuve, heure, duree, modalite);
 
-        System.out.println("\n2. INFOS ETUDIANT");
-        System.out.print("Nom : ");
-        String nom = scanner.nextLine().trim();
-        System.out.print("Prenom : ");
-        String prenom = scanner.nextLine().trim();
-        System.out.print("Numero etudiant : ");
-        String numApp = scanner.nextLine().trim();
+        System.out.println("\n2. INFOS ETUDIANT(S) IMPLIQUE(S)");
+        boolean ajouterUnAutre = true;
 
-        Cursus cursus = selectionnerCursus();
-        formulaire.ajouterEtudiant(new Etudiant(nom, prenom, numApp, cursus));
+        while (ajouterUnAutre) {
+            System.out.print("Nom : ");
+            String nom = scanner.nextLine().trim();
+            System.out.print("Prenom : ");
+            String prenom = scanner.nextLine().trim();
+            System.out.print("Numero etudiant : ");
+            String numApp = scanner.nextLine().trim();
 
+            Cursus cursus = selectionnerCursus();
+            formulaire.ajouterEtudiant(new Etudiant(nom, prenom, numApp, cursus));
+
+            System.out.print("\nY a-t-il un autre etudiant (un complice) impliqué dans ce meme dossier ? (oui/non) : ");
+            String reponse = scanner.nextLine().trim();
+            if (!reponse.equalsIgnoreCase("oui")) {
+                ajouterUnAutre = false;
+            }
+        }
         System.out.println("\n3. DETAILS DE LA FRAUDE");
         System.out.print("Description des faits : ");
         String desc = scanner.nextLine().trim();
@@ -204,9 +217,16 @@ public class ConsoleUI {
         System.out.println("\n--- LISTE DES DOSSIERS DE FRAUDE ---");
         for (Formulaire f : list) {
             System.out.println("Dossier ID : " + f.getId());
+
+
             if (!f.getEtudiants().isEmpty()) {
-                System.out.println("  Etudiant : " + f.getEtudiants().get(0).getNom() + " " + f.getEtudiants().get(0).getPrenom());
+                System.out.println("  Etudiant(s) implique(s) :");
+
+                for (Etudiant etu : f.getEtudiants()) {
+                    System.out.println("   - " + etu.getNom() + " " + etu.getPrenom() + " (ID: " + etu.getId() + ")");
+                }
             }
+
             if (!f.getFraudes().isEmpty()) {
                 System.out.println("  Type fraude : " + f.getFraudes().get(0).getClass().getSimpleName());
                 System.out.println("  Description : " + f.getFraudes().get(0).getDescription());
@@ -248,4 +268,21 @@ public class ConsoleUI {
             System.out.println("[" + e.getHorodatage() + "] " + e.getAction());
         }
     }
+
+    private void actionAnalyserReseau() {
+        System.out.println("\n--- ANALYSE DU RESEAU DE FRAUDE ---");
+
+
+        Etudiant suspect = systeme.trouverTricheurLePlusConnecte();
+
+        if (suspect != null) {
+            System.out.println("Resultat de l'analyse : Le cerveau presumé a été identifié !");
+            System.out.println("L'etudiant au centre du plus grand nombre de fraudes croisees est :");
+            System.out.println("-> " + suspect.getPrenom() + " " + suspect.getNom() + " (Cursus : " + suspect.getCursus() + ")");
+        } else {
+            System.out.println("Aucune fraude en groupe detectee pour le moment. Le reseau est vide ou sans connexions.");
+        }
+    }
+
+
 }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -166,4 +167,62 @@ public class SystemeGestionTest {
         assertNotNull(systeme.getEtudiants());
         assertNotNull(systeme.getJournal());
     }
+
+    @Test
+    void testGenererGrapheEtTrouverCerveau() {
+        SystemeGestion systeme = new SystemeGestion();
+
+        Etudiant titouan = new Etudiant("1", "Peloin", "Titouan", Cursus.E3e);
+        Etudiant guillaume = new Etudiant("2", "Prigent", "Guillaume", Cursus.E3e);
+        Etudiant basile = new Etudiant("3", "Morin", "Basile", Cursus.E3e);
+
+        Formulaire form1 = new Formulaire();
+        form1.ajouterEtudiant(titouan);
+        form1.ajouterEtudiant(guillaume);
+
+        Formulaire form2 = new Formulaire();
+        form2.ajouterEtudiant(titouan);
+        form2.ajouterEtudiant(basile);
+
+        systeme.enregistrerFormulaire(form1);
+        systeme.enregistrerFormulaire(form2);
+
+        Map<Etudiant, List<Etudiant>> graphe = systeme.genererGrapheTricheurs();
+
+        assertNotNull(graphe);
+        assertEquals(2, graphe.get(titouan).size());
+        assertEquals(1, graphe.get(guillaume).size());
+        assertEquals(titouan, systeme.trouverTricheurLePlusConnecte());
+    }
+
+    @Test
+    public void testTrouverCerveauSystemeVide() {
+        SystemeGestion systemeVide = new SystemeGestion();
+        assertNull(systemeVide.trouverTricheurLePlusConnecte());
+    }
+
+    @Test
+    public void testGrapheTricheursDoublonsRenvoyes() {
+        SystemeGestion sysDoublon = new SystemeGestion();
+
+        Etudiant tricheur1 = new Etudiant("10", "Dupont", "Jean", Cursus.E3e);
+        Etudiant tricheur2 = new Etudiant("11", "Martin", "Paul", Cursus.E3e);
+
+        Formulaire f1 = new Formulaire();
+        f1.ajouterEtudiant(tricheur1);
+        f1.ajouterEtudiant(tricheur2);
+
+        Formulaire f2 = new Formulaire();
+        f2.ajouterEtudiant(tricheur1);
+        f2.ajouterEtudiant(tricheur2);
+
+        sysDoublon.enregistrerFormulaire(f1);
+        sysDoublon.enregistrerFormulaire(f2);
+
+        Map<Etudiant, List<Etudiant>> graphe = sysDoublon.genererGrapheTricheurs();
+
+        assertEquals(1, graphe.get(tricheur1).size());
+        assertTrue(graphe.get(tricheur1).contains(tricheur2));
+    }
+
 }

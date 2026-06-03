@@ -1,5 +1,6 @@
 package fr.eseo.e3e.devlogiciel.ui;
 
+import fr.eseo.e3e.devlogiciel.etudiant.Etudiant;
 import fr.eseo.e3e.devlogiciel.formulaire.Formulaire;
 import fr.eseo.e3e.devlogiciel.systeme.SystemeGestion;
 import org.junit.jupiter.api.AfterEach;
@@ -33,7 +34,7 @@ public class ConsoleUITest {
 
     @Test
     public void testDemarrerEtQuitter() {
-        simulerEntreesUtilisateur("6\n");
+        simulerEntreesUtilisateur("7\n");
         ConsoleUI ui = new ConsoleUI(systeme);
 
         assertDoesNotThrow(ui::demarrer);
@@ -41,7 +42,7 @@ public class ConsoleUITest {
 
     @Test
     public void testDemarrerOptionInvalidePuisQuitter() {
-        simulerEntreesUtilisateur("9\n6\n");
+        simulerEntreesUtilisateur("9\n7\n");
         ConsoleUI ui = new ConsoleUI(systeme);
 
         assertDoesNotThrow(ui::demarrer);
@@ -59,12 +60,13 @@ public class ConsoleUITest {
                 "Titouan\n" +
                 "444\n" +
                 "3\n" +
+                "non\n"+
                 "A triché\n" +
                 "Copie sur voisin\n" +
                 "1\n" +
                 "A4\n" +
                 "oui\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -85,12 +87,13 @@ public class ConsoleUITest {
                 "Alice\n" +
                 "555\n" +
                 "1\n" +
+                "non\n"+
                 "A triché\n" +
                 "Formules stockées\n" +
                 "2\n" +
                 "Casio\n" +
                 "AntiSecheV3\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -111,12 +114,13 @@ public class ConsoleUITest {
                 "Prenom\n" +
                 "777\n" +
                 "9\n" +
+                "non\n"+
                 "Faits\n" +
                 "Texte\n" +
                 "3\n" +
                 "ChatGPT\n" +
                 "192.168.1.50\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -127,11 +131,11 @@ public class ConsoleUITest {
 
     @Test
     public void testToutesLesModalitesEtCursus() {
-        String inputs = "1\nECUE-1\n\n\n\n3\nN\nP\n1\n2\nD\nC\n1\nA4\nnon\n" +
-                "1\nECUE-2\n\n\n\n4\nN\nP\n1\n4\nD\nC\n1\nA4\nnon\n" +
-                "1\nECUE-3\n\n\n\n5\nN\nP\n1\n5\nD\nC\n1\nA4\nnon\n" +
-                "1\nECUE-4\n\n\n\n6\nN\nP\n1\n6\nD\nC\n1\nA4\nnon\n" +
-                "6\n";
+        String inputs = "1\nECUE-1\n\n\n\n3\nN\nP\n1\n2\nnon\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE-2\n\n\n\n4\nN\nP\n1\n4\nnon\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE-3\n\n\n\n5\nN\nP\n1\n5\nnon\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE-4\n\n\n\n6\nN\nP\n1\n6\nnon\nD\nC\n1\nA4\nnon\n" +
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -149,10 +153,11 @@ public class ConsoleUITest {
                 "\n\n\n" +
                 "1\n" +
                 "N\nP\n1\n3\n" +
+                "non\n"+
                 "Desc\nContenu\n" +
                 "4\n" +
                 "A4\nnon\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -163,8 +168,7 @@ public class ConsoleUITest {
 
     @Test
     public void testActionSupprimerFormulaireSuccesEtEchec() {
-        String creationInput = "1\nECUE\n\n\n\n1\nN\nP\n1\n1\nD\nC\n1\nA4\nnon\n6\n";
-        simulerEntreesUtilisateur(creationInput);
+        String creationInput = "1\nECUE\n\n\n\n1\nN\nP\n1\n1\nnon\nD\nC\n1\nA4\nnon\n7\n";        simulerEntreesUtilisateur(creationInput);
         ConsoleUI uiCreation = new ConsoleUI(systeme);
         uiCreation.demarrer();
 
@@ -172,7 +176,7 @@ public class ConsoleUITest {
 
         String suppressionInput = "2\n" + idDynamique + "\n" +
                 "2\nabc\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(suppressionInput);
         ConsoleUI uiSuppression = new ConsoleUI(systeme);
@@ -184,9 +188,9 @@ public class ConsoleUITest {
     @Test
     public void testAfficherTousLesFormulairesVideEtPlein() {
         String inputs = "3\n" +
-                "1\nECUE\n\n\n\n1\nN\nP\n1\n1\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE\n\n\n\n1\nN\nP\n1\n1\nnon\nD\nC\n1\nA4\nnon\n" +
                 "3\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -197,12 +201,12 @@ public class ConsoleUITest {
 
     @Test
     public void testActionRechercheCroiseeResultat() {
-        String inputs = "1\nECUE\n\n\n\n1\nN\nP\n1\n3\nD\nC\n1\nA4\nnon\n" +
+        String inputs = "1\nECUE\n\n\n\n1\nN\nP\n1\n3\nnon\nD\nC\n1\nA4\nnon\n" +
                 "4\n3\n1\n" +
                 "4\n3\n2\n" +
                 "4\n3\n3\n" +
                 "4\n4\n4\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -213,9 +217,9 @@ public class ConsoleUITest {
 
     @Test
     public void testActionRechercheCroiseeSansResultat() {
-        String inputs = "4\n1\n2\n" + // Cursus E1, Type Calculatrice sur base vide -> Vide (Déclenche res.isEmpty() -> true)
-                "4\n2\n3\n" + // Cursus E2, Type IAG Connectee sur base vide -> Vide (Déclenche res.isEmpty() -> true)
-                "6\n";
+        String inputs = "4\n1\n2\n" +
+                "4\n2\n3\n" +
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -227,9 +231,9 @@ public class ConsoleUITest {
     @Test
     public void testAfficherJournalHistoriqueVideEtPlein() {
         String inputs = "5\n" +
-                "1\nECUE\n\n\n\n1\nN\nP\n1\n1\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE\n\n\n\n1\nN\nP\n1\n1\nnon\nD\nC\n1\nA4\nnon\n" +
                 "5\n" +
-                "6\n";
+                "7\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -240,17 +244,113 @@ public class ConsoleUITest {
 
     @Test
     public void testAfficherTousLesFormulairesSansEtudiantNiFraude() {
-        // Ajout d'un formulaire vide (créé manuellement, hors UI)
         systeme.enregistrerFormulaire(new Formulaire());
 
-        // Simulation de l'appel au menu "3" (Afficher tous les formulaires) puis "6" (Quitter)
-        String inputs = "3\n6\n";
+        String inputs = "3\n7\n";
         simulerEntreesUtilisateur(inputs);
 
         ConsoleUI ui = new ConsoleUI(systeme);
         ui.demarrer();
 
-        // Si on arrive ici sans erreur, les branches "false" des if(!isEmpty()) ont été couvertes.
         assertEquals(1, systeme.getFormulaires().size());
+    }
+
+    @Test
+    public void testActionAnalyserReseauVide() {
+        String inputs = "6\n7\n";
+        simulerEntreesUtilisateur(inputs);
+
+        ConsoleUI ui = new ConsoleUI(systeme);
+        assertDoesNotThrow(ui::demarrer);
+    }
+
+    @Test
+    public void testActionAnalyserReseauAvecSuspect() {
+        Etudiant t = new Etudiant("Peloin", "Titouan", "111", Etudiant.Cursus.E3e);
+        Etudiant b = new Etudiant("Prigent", "Guillaume", "222", Etudiant.Cursus.E3e);
+
+        Formulaire formTriche = new Formulaire();
+        formTriche.ajouterEtudiant(t);
+        formTriche.ajouterEtudiant(b);
+        systeme.enregistrerFormulaire(formTriche);
+
+        String inputs = "6\n7\n";
+        simulerEntreesUtilisateur(inputs);
+
+        ConsoleUI ui = new ConsoleUI(systeme);
+        assertDoesNotThrow(ui::demarrer);
+    }
+
+    @Test
+    public void testSaisirFormulairePlusieursEtudiantsEtOptionsManquantes() {
+        String inputs = "1\n" +             // Menu : Nouveau formulaire
+                "S06-MATHS\n" +             // Code ECUE
+                "\n" +                      // Date par défaut
+                "\n" +                      // Heure par défaut
+                "\n" +                      // Durée par défaut
+                "2\n" +                     // MODALITÉ 2 (ORAL) -> Couvre le switch manquant !
+                "NomTricheur1\n" +
+                "Prenom1\n" +
+                "111\n" +
+                "1\n" +                     // CURSUS 1 (E1) -> Couvre le switch manquant !
+                "oui\n" +                   // UN COMPLICE ? OUI ! -> Couvre la branche manquante de la boucle !
+                "NomTricheur2\n" +
+                "Prenom2\n" +
+                "222\n" +
+                "3\n" +                     // Cursus par défaut pour le complice
+                "non\n" +                   // On arrête d'ajouter des étudiants
+                "Faits\n" +
+                "Preuves\n" +
+                "1\n" +                     // Type : Papier
+                "A4\n" +
+                "non\n" +
+                "7\n";                      // Menu : Quitter
+
+        simulerEntreesUtilisateur(inputs);
+        ConsoleUI ui = new ConsoleUI(systeme);
+        ui.demarrer();
+
+        // On vérifie que le formulaire a bien été créé et qu'il contient bien NOS DEUX étudiants
+        assertEquals(1, systeme.getFormulaires().size());
+        assertEquals(2, systeme.getFormulaires().get(0).getEtudiants().size());
+    }
+
+    @Test
+    public void testScenarioReseauCompletAvecVraiCerveau() {
+        String form1 = "1\n" +
+                "ECUE-1\n\n\n\n1\n" +
+                "Peloin\nTitouan\n444\n3\n" +
+                "oui\n" +
+                "Prigent\nGuillaume\n555\n3\n" +
+                "non\n" +
+                "Copie TP\nPreuve1\n" +
+                "1\nA4\nnon\n";
+
+        String form2 = "1\n" +
+                "ECUE-2\n\n\n\n1\n" +
+                "Peloin\nTitouan\n444\n3\n" +
+                "oui\n" +
+                "Collaborateur\nBasile\n666\n3\n" +
+                "non\n" +
+                "Triche exam\nPreuve2\n" +
+                "1\nA4\nnon\n";
+
+        String actionsFinales = "6\n7\n";
+
+        simulerEntreesUtilisateur(form1 + form2 + actionsFinales);
+
+        ConsoleUI ui = new ConsoleUI(systeme);
+        ui.demarrer();
+
+
+        assertEquals(2, systeme.getFormulaires().size());
+
+        assertEquals(2, systeme.getFormulaires().get(0).getEtudiants().size());
+        assertEquals(2, systeme.getFormulaires().get(1).getEtudiants().size());
+
+        Etudiant cerveau = systeme.trouverTricheurLePlusConnecte();
+        assertNotNull(cerveau, "Le graphe n'a pas trouvé de cerveau !");
+        assertEquals("444", cerveau.getId(), "Le cerveau trouvé n'est pas le bon !");
+        assertEquals("Titouan", cerveau.getPrenom());
     }
 }

@@ -138,4 +138,25 @@ public class Etudiant implements Serializable {
     public void setCursus(Cursus cursus) {
         this.cursus = cursus;
     }
+
+    /**
+     * Compare deux étudiants en se basant uniquement sur leur numéro apprenant.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Etudiant etudiant = (Etudiant) o;
+
+        return numeroApprenant != null ? numeroApprenant.equals(etudiant.numeroApprenant) : etudiant.numeroApprenant == null;
+    }
+
+    /**
+     * Génère un hash basé sur le numéro apprenant (indispensable pour le fonctionnement du graphe).
+     */
+    @Override
+    public int hashCode() {
+        return numeroApprenant != null ? numeroApprenant.hashCode() : 0;
+    }
 }
