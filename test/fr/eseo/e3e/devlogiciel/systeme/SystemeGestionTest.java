@@ -6,6 +6,7 @@ import fr.eseo.e3e.devlogiciel.formulaire.Formulaire;
 import fr.eseo.e3e.devlogiciel.fraude.FraudeCalculatrice;
 import fr.eseo.e3e.devlogiciel.fraude.FraudePapier;
 import fr.eseo.e3e.devlogiciel.journalhistorique.EntreeHistorique;
+import fr.eseo.e3e.devlogiciel.utils.FraudeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +52,7 @@ public class SystemeGestionTest {
     }
 
     @Test
-    public void testSupprimerFormulaireSucces() {
+    public void testSupprimerFormulaireSucces() throws FraudeException {
         Formulaire form = new Formulaire();
         int idDossier = form.getId();
         systeme.enregistrerFormulaire(form);
@@ -64,7 +65,7 @@ public class SystemeGestionTest {
     }
 
     @Test
-    public void testSupprimerFormulaireEchec() {
+    public void testSupprimerFormulaireEchec() throws FraudeException {
         Formulaire form = new Formulaire();
         systeme.enregistrerFormulaire(form);
 
