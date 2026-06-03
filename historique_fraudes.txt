@@ -1,5 +1,0 @@
-2026-06-02T14:30:16.413329 - Enregistrement du formulaire ID : 1
-2026-06-02T15:01:22.895773 - Recherche croisée effectuée pour le cursus E2 et le type FraudePapier
-2026-06-02T15:01:28.441414 - Recherche croisée effectuée pour le cursus E3e et le type FraudeCalculatrice
-2026-06-02T15:12:59.165837 - Enregistrement du formulaire ID : 1
-2026-06-02T15:13:16.447085 - Suppression du formulaire ID : 1

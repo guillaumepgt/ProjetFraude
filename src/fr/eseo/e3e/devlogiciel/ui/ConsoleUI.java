@@ -27,9 +27,9 @@ public class ConsoleUI {
     public void demarrer() {
         boolean quitter = false;
 
-        System.out.println("=================================================");
-        System.out.println("  BIENVENUE DANS LE SYSTÈME DE GESTION DES FRAUDES");
-        System.out.println("=================================================");
+        System.out.println("-------------------------------------------------");
+        System.out.println("  APPLI DE GESTION DES FRAUDES ACADEMIQUES");
+        System.out.println("-------------------------------------------------");
 
         while (!quitter) {
             afficherMenuPrincipal();
@@ -53,101 +53,113 @@ public class ConsoleUI {
                     break;
                 case "6":
                     quitter = true;
-                    System.out.println("Arrêt de l'application. Au revoir !");
+                    System.out.println("Fermeture de l'application.");
                     break;
                 default:
-                    System.out.println("⚠️ Option invalide. Choisissez entre 1 et 6.");
+                    System.out.println("[Erreur] Choix invalide, tapez un chiffre entre 1 et 6.");
             }
         }
         scanner.close();
     }
 
     private void afficherMenuPrincipal() {
-        System.out.println("\n================= MENU PRINCIPAL =================");
-        System.out.println("1. Enregistrer un nouveau dossier de fraude complet");
+        System.out.println("\n--- MENU PRINCIPAL ---");
+        System.out.println("1. Creer un nouveau dossier de fraude");
         System.out.println("2. Supprimer un dossier par son ID");
-        System.out.println("3. Afficher tous les dossiers et leurs détails");
-        System.out.println("4. Lancer une recherche croisée ciblée (Cursus + Type)");
-        System.out.println("5. Afficher le journal d'historique en direct");
-        System.out.println("6. Quitter le programme");
-        System.out.print("Votre choix (1-6) : ");
+        System.out.println("3. Afficher la liste des dossiers");
+        System.out.println("4. Recherche croisee (Cursus + Type)");
+        System.out.println("5. Afficher les logs du systeme");
+        System.out.println("6. Quitter");
+        System.out.print("Votre choix : ");
     }
 
     private void saisirNouveauFormulaire() {
-        System.out.println("\n--- ENREGISTREMENT D'UN NOUVEAU FORMULAIRE ---");
+        System.out.println("\n=== REMPLISSAGE DU FORMULAIRE ===");
         Formulaire formulaire = new Formulaire();
 
-        System.out.println("\n[Étape 1 : Informations de l'Épreuve]");
+        System.out.println("\n1. INFOS EPREUVE");
         System.out.print("Code ECUE (ex: S06-POO) : ");
         String code = scanner.nextLine().trim();
 
         LocalDate dateEpreuve = LocalDate.now();
-        System.out.print("Date (AAAA-MM-JJ) [Entrée = Aujourd'hui] : ");
+        System.out.print("Date (AAAA-MM-JJ) [Entree pour aujourd'hui] : ");
         String dateStr = scanner.nextLine().trim();
         if (!dateStr.isEmpty()) {
-            try { dateEpreuve = LocalDate.parse(dateStr); } catch (DateTimeParseException e) { System.out.println("Format invalide, date du jour choisie."); }
+            try {
+                dateEpreuve = LocalDate.parse(dateStr);
+            } catch (DateTimeParseException e) {
+                System.out.println("Format incorrect. Date du jour selectionnee par defaut.");
+            }
         }
 
-        System.out.print("Heure (HH:MM) : ");
+        System.out.print("Heure du controle (HH:MM) : ");
         LocalTime heure = LocalTime.of(8, 0);
-        try { heure = LocalTime.parse(scanner.nextLine().trim()); } catch (DateTimeParseException e) { System.out.println("Heure par défaut réglée à 08:00."); }
+        try {
+            heure = LocalTime.parse(scanner.nextLine().trim());
+        } catch (DateTimeParseException e) {
+            System.out.println("Format incorrect. Heure mise a 08:00 par defaut.");
+        }
 
-        System.out.print("Durée (en minutes) : ");
+        System.out.print("Duree totale (en minutes) : ");
         int duree = 120;
-        try { duree = Integer.parseInt(scanner.nextLine().trim()); } catch (NumberFormatException e) { System.out.println("Durée par défaut réglée à 120 min."); }
+        try {
+            duree = Integer.parseInt(scanner.nextLine().trim());
+        } catch (NumberFormatException e) {
+            System.out.println("Valeur incorrecte. Duree mise a 120 min par defaut.");
+        }
 
         Epreuve.Modalite modalite = selectionnerModalite();
         Epreuve epreuve = new Epreuve(code, dateEpreuve, heure, duree, modalite);
 
-        System.out.println("\n[Étape 2 : Informations de l'Étudiant Impliqué]");
+        System.out.println("\n2. INFOS ETUDIANT");
         System.out.print("Nom : ");
         String nom = scanner.nextLine().trim();
-        System.out.print("Prénom : ");
+        System.out.print("Prenom : ");
         String prenom = scanner.nextLine().trim();
-        System.out.print("Numéro Apprenant : ");
+        System.out.print("Numero etudiant : ");
         String numApp = scanner.nextLine().trim();
 
         Cursus cursus = selectionnerCursus();
         formulaire.ajouterEtudiant(new Etudiant(nom, prenom, numApp, cursus));
 
-        System.out.println("\n[Étape 3 : Nature de la Fraude]");
+        System.out.println("\n3. DETAILS DE LA FRAUDE");
         System.out.print("Description des faits : ");
         String desc = scanner.nextLine().trim();
-        System.out.print("Contenu textuel / Preuve : ");
+        System.out.print("Preuves ou contenu textuel : ");
         String contenu = scanner.nextLine().trim();
 
-        System.out.println("Catégorie : 1.Papier | 2.Calculatrice | 3.IAG Connectée");
-        System.out.print("Votre choix : ");
+        System.out.println("Type de support : 1.Papier | 2.Calculatrice | 3.IAG Connectee");
+        System.out.print("Choix : ");
         String cat = scanner.nextLine().trim();
 
         Fraude fraude;
         if (cat.equals("2")) {
             System.out.print("Marque de la calculatrice : ");
             String marque = scanner.nextLine().trim();
-            System.out.print("Nom du programme : ");
+            System.out.print("Nom du programme utilise : ");
             String prog = scanner.nextLine().trim();
             fraude = new FraudeCalculatrice(dateEpreuve, desc, contenu, marque, prog);
         } else if (cat.equals("3")) {
-            System.out.print("Service IAG (ex: ChatGPT) : ");
+            System.out.print("Nom de l'IA (ex: ChatGPT) : ");
             String service = scanner.nextLine().trim();
-            System.out.print("Adresse IP : ");
+            System.out.print("Adresse IP detectee : ");
             String ip = scanner.nextLine().trim();
             fraude = new FraudeIAGConnectee(dateEpreuve, desc, contenu, service, ip);
         } else {
-            System.out.print("Dimensions du papier : ");
+            System.out.print("Format du papier (ex: A4, anti-seche) : ");
             String dim = scanner.nextLine().trim();
-            System.out.print("Feuille pliée ? (oui/non) : ");
+            System.out.print("Est-ce que la feuille etait pliee ? (oui/non) : ");
             boolean plie = scanner.nextLine().trim().equalsIgnoreCase("oui");
             fraude = new FraudePapier(dateEpreuve, desc, contenu, dim, plie);
         }
 
         formulaire.ajouterFraude(fraude);
         systeme.enregistrerFormulaire(formulaire);
-        System.out.println("\n✔️ Dossier enregistré ! ID généré : " + formulaire.getId());
+        System.out.println("[OK] Dossier enregistre avec l'ID : " + formulaire.getId());
     }
 
     private Epreuve.Modalite selectionnerModalite() {
-        System.out.println("Modalité : 1.ECRIT | 2.ORAL | 3.QCM | 4.MACHINE | 5.PROJET | 6.TP");
+        System.out.println("Modalite : 1.ECRIT | 2.ORAL | 3.QCM | 4.MACHINE | 5.PROJET | 6.TP");
         System.out.print("Votre choix : ");
         switch (scanner.nextLine().trim()) {
             case "2": return Epreuve.Modalite.ORAL;
@@ -160,7 +172,7 @@ public class ConsoleUI {
     }
 
     private Cursus selectionnerCursus() {
-        System.out.println("Cursus : 1.E1 | 2.E2 | 3.E3e | 4.E3a | 5.E4 | 6.E5");
+        System.out.println("Promo : 1.E1 | 2.E2 | 3.E3e | 4.E3a | 5.E4 | 6.E5");
         System.out.print("Votre choix : ");
         switch (scanner.nextLine().trim()) {
             case "1": return Cursus.E1;
@@ -173,35 +185,41 @@ public class ConsoleUI {
     }
 
     private void actionSupprimerFormulaire() {
-        System.out.print("❌ Entrez l'ID du formulaire à supprimer : ");
+        System.out.print("ID du formulaire a supprimer : ");
         try {
             int id = Integer.parseInt(scanner.nextLine().trim());
             systeme.supprimerFormulaire(id);
-            System.out.println("✔️ Demande traitée par le système.");
+            System.out.println("Traitement de la suppression terminee.");
         } catch (NumberFormatException e) {
-            System.out.println("⚠️ ID invalide.");
+            System.out.println("[Erreur] L'ID doit etre un nombre entier.");
         }
     }
 
     private void afficherTousLesFormulaires() {
-        List<Formulaire> formulaires = systeme.getFormulaires();
-        if (formulaires.isEmpty()) {
-            System.out.println("ℹ️ Base de données vide.");
+        List<Formulaire> list = systeme.getFormulaires();
+        if (list.isEmpty()) {
+            System.out.println("Aucun dossier dans la base de donnees.");
             return;
         }
-        System.out.println("\n================ BASE DE DONNÉES ================");
-        for (Formulaire f : formulaires) {
-            System.out.println("\n📂 DOSSIER ID : " + f.getId());
-            System.out.println("   |_ Étudiant : " + f.getEtudiants().get(0).getNom() + " " + f.getEtudiants().get(0).getPrenom());
-            System.out.println("   |_ Tricherie : " + f.getFraudes().get(0).getClass().getSimpleName() + " -> " + f.getFraudes().get(0).getDescription());
+        System.out.println("\n--- LISTE DES DOSSIERS DE FRAUDE ---");
+        for (Formulaire f : list) {
+            System.out.println("Dossier ID : " + f.getId());
+            if (!f.getEtudiants().isEmpty()) {
+                System.out.println("  Etudiant : " + f.getEtudiants().get(0).getNom() + " " + f.getEtudiants().get(0).getPrenom());
+            }
+            if (!f.getFraudes().isEmpty()) {
+                System.out.println("  Type fraude : " + f.getFraudes().get(0).getClass().getSimpleName());
+                System.out.println("  Description : " + f.getFraudes().get(0).getDescription());
+            }
+            System.out.println("------------------------------------");
         }
     }
 
     private void actionRechercheCroisee() {
-        System.out.println("\n--- CONFIGURATION RECHERCHE ---");
+        System.out.println("\n--- FILTRES DE RECHERCHE ---");
         Cursus cursus = selectionnerCursus();
 
-        System.out.println("Type : 1.Papier | 2.Calculatrice | 3.IAG Connectée");
+        System.out.println("Type de triche : 1.Papier | 2.Calculatrice | 3.IAG Connectee");
         System.out.print("Choix : ");
         Class<?> typeClasse = FraudePapier.class;
         String t = scanner.nextLine().trim();
@@ -210,21 +228,23 @@ public class ConsoleUI {
 
         List<Formulaire> res = systeme.rechercheCroisee(cursus, typeClasse);
         if (res.isEmpty()) {
-            System.out.println("❌ Aucun résultat.");
+            System.out.println("Aucun dossier ne correspond a ces criteres.");
         } else {
-            System.out.println("🔍 " + res.size() + " dossier(s) trouvé(s) :");
-            for (Formulaire f : res) System.out.println("  • ID : " + f.getId());
+            System.out.println("Resultat(s) trouve(s) :");
+            for (Formulaire f : res) {
+                System.out.println("  - Dossier ID : " + f.getId());
+            }
         }
     }
 
     private void afficherJournalHistorique() {
-        List<EntreeHistorique> historique = systeme.consulterHistorique();
-        if (historique.isEmpty()) {
-            System.out.println("ℹ️ Journal vide.");
+        List<EntreeHistorique> hist = systeme.consulterHistorique();
+        if (hist.isEmpty()) {
+            System.out.println("Le journal d'historique est vide.");
             return;
         }
-        System.out.println("\n--- AUDIT LIVE ---");
-        for (EntreeHistorique e : historique) {
+        System.out.println("\n--- HISTORIQUE DU SYSTEME ---");
+        for (EntreeHistorique e : hist) {
             System.out.println("[" + e.getHorodatage() + "] " + e.getAction());
         }
     }
