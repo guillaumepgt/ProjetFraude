@@ -14,9 +14,9 @@ import java.util.List;
 public class SystemeGestion implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private List<Formulaire> formulaires;
-    private List<Etudiant> etudiants;
-    private JournalHistorique journal;
+    private final List<Formulaire> formulaires;
+    private final List<Etudiant> etudiants;
+    private final JournalHistorique journal;
 
     public SystemeGestion() {
         this.formulaires = new ArrayList<>();
