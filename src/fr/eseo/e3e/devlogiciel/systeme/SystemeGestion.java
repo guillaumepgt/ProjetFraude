@@ -7,6 +7,8 @@ import fr.eseo.e3e.devlogiciel.fraude.Fraude;
 import fr.eseo.e3e.devlogiciel.journalhistorique.EntreeHistorique;
 import fr.eseo.e3e.devlogiciel.journalhistorique.JournalHistorique;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +95,38 @@ public class SystemeGestion implements Serializable {
             System.out.println("⚠️ Erreur de lecture de la sauvegarde. Création d'un système vide.");
         }
         return new SystemeGestion();
+    }
+
+    public Map<Etudiant, List<Etudiant>> genererGrapheTricheurs() {
+        Map<Etudiant, List<Etudiant>> graphe = new HashMap<>();
+
+        for (Formulaire formulaire : formulaires) {
+            List<Etudiant> impliques = formulaire.getEtudiants();
+
+            for (Etudiant e1 : impliques) {
+                graphe.putIfAbsent(e1, new ArrayList<>());
+                for (Etudiant e2 : impliques) {
+                    if (!e1.equals(e2) && !graphe.get(e1).contains(e2)) {
+                        graphe.get(e1).add(e2);
+                    }
+                }
+            }
+        }
+        return graphe;
+    }
+
+    public Etudiant trouverTricheurLePlusConnecte() {
+        Map<Etudiant, List<Etudiant>> graphe = genererGrapheTricheurs();
+        Etudiant cerveau = null;
+        int maxConnexions = -1;
+
+        for (Map.Entry<Etudiant, List<Etudiant>> entree : graphe.entrySet()) {
+            if (entree.getValue().size() > maxConnexions) {
+                maxConnexions = entree.getValue().size();
+                cerveau = entree.getKey();
+            }
+        }
+        return cerveau;
     }
 
     public List<Formulaire> getFormulaires() { return formulaires; }
