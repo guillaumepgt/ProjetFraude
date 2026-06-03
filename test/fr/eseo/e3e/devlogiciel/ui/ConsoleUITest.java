@@ -1,5 +1,6 @@
 package fr.eseo.e3e.devlogiciel.ui;
 
+import fr.eseo.e3e.devlogiciel.formulaire.Formulaire;
 import fr.eseo.e3e.devlogiciel.systeme.SystemeGestion;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -125,6 +126,42 @@ public class ConsoleUITest {
     }
 
     @Test
+    public void testToutesLesModalitesEtCursus() {
+        String inputs = "1\nECUE-1\n\n\n\n3\nN\nP\n1\n2\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE-2\n\n\n\n4\nN\nP\n1\n4\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE-3\n\n\n\n5\nN\nP\n1\n5\nD\nC\n1\nA4\nnon\n" +
+                "1\nECUE-4\n\n\n\n6\nN\nP\n1\n6\nD\nC\n1\nA4\nnon\n" +
+                "6\n";
+
+        simulerEntreesUtilisateur(inputs);
+        ConsoleUI ui = new ConsoleUI(systeme);
+        ui.demarrer();
+
+        assertEquals(4, systeme.getFormulaires().size());
+    }
+
+    @Test
+    public void testTricheInvalideEtEntreesVidesMenu() {
+        String inputs = "\n" +
+                "abc\n" +
+                "1\n" +
+                "ECUE-5\n" +
+                "\n\n\n" +
+                "1\n" +
+                "N\nP\n1\n3\n" +
+                "Desc\nContenu\n" +
+                "4\n" +
+                "A4\nnon\n" +
+                "6\n";
+
+        simulerEntreesUtilisateur(inputs);
+        ConsoleUI ui = new ConsoleUI(systeme);
+        ui.demarrer();
+
+        assertEquals(1, systeme.getFormulaires().size());
+    }
+
+    @Test
     public void testActionSupprimerFormulaireSuccesEtEchec() {
         String creationInput = "1\nECUE\n\n\n\n1\nN\nP\n1\n1\nD\nC\n1\nA4\nnon\n6\n";
         simulerEntreesUtilisateur(creationInput);
@@ -159,11 +196,12 @@ public class ConsoleUITest {
     }
 
     @Test
-    public void testActionRechercheCroiseeResultatEtVide() {
+    public void testActionRechercheCroiseeResultat() {
         String inputs = "1\nECUE\n\n\n\n1\nN\nP\n1\n3\nD\nC\n1\nA4\nnon\n" +
                 "4\n3\n1\n" +
-                "4\n4\n" +
-                "2\n" +
+                "4\n3\n2\n" +
+                "4\n3\n3\n" +
+                "4\n4\n4\n" +
                 "6\n";
 
         simulerEntreesUtilisateur(inputs);
@@ -174,8 +212,10 @@ public class ConsoleUITest {
     }
 
     @Test
-    public void testActionRechercheCroiseeIAG() {
-        String inputs = "4\n3\n3\n6\n";
+    public void testActionRechercheCroiseeSansResultat() {
+        String inputs = "4\n1\n2\n" + // Cursus E1, Type Calculatrice sur base vide -> Vide (Déclenche res.isEmpty() -> true)
+                "4\n2\n3\n" + // Cursus E2, Type IAG Connectee sur base vide -> Vide (Déclenche res.isEmpty() -> true)
+                "6\n";
 
         simulerEntreesUtilisateur(inputs);
         ConsoleUI ui = new ConsoleUI(systeme);
@@ -196,5 +236,21 @@ public class ConsoleUITest {
         ui.demarrer();
 
         assertFalse(systeme.consulterHistorique().isEmpty());
+    }
+
+    @Test
+    public void testAfficherTousLesFormulairesSansEtudiantNiFraude() {
+        // Ajout d'un formulaire vide (créé manuellement, hors UI)
+        systeme.enregistrerFormulaire(new Formulaire());
+
+        // Simulation de l'appel au menu "3" (Afficher tous les formulaires) puis "6" (Quitter)
+        String inputs = "3\n6\n";
+        simulerEntreesUtilisateur(inputs);
+
+        ConsoleUI ui = new ConsoleUI(systeme);
+        ui.demarrer();
+
+        // Si on arrive ici sans erreur, les branches "false" des if(!isEmpty()) ont été couvertes.
+        assertEquals(1, systeme.getFormulaires().size());
     }
 }

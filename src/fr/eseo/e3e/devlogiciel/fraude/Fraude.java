@@ -42,9 +42,9 @@ public abstract class Fraude implements Serializable {
      * @param contenu               La description de la fraude
      */
     public Fraude(LocalDate dateReleve, String description, String contenu) {
-        this.setDateReleve(dateReleve);
-        this.setDescription(description);
-        this.setContenu(contenu);
+        this.dateReleve = dateReleve;
+        this.description = description;
+        this.contenu = contenu;
     }
     /**
      * Récupère la date de la fraude
