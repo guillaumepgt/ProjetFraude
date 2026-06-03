@@ -20,7 +20,7 @@ class FormulaireTest {
         assertTrue(form.getId() > 0);
         assertNotNull(form.getDateCreation());
         assertEquals(form.getDateCreation(), form.getDateDerniereModification());
-        assertNull(form.getEpreuve());
+        assertNotNull(form.getEpreuve());
         assertNotNull(form.getEtudiants());
         assertTrue(form.getEtudiants().isEmpty());
         assertNotNull(form.getFraudes());
@@ -31,16 +31,16 @@ class FormulaireTest {
     void testConstructeurParametre() {
         LocalDateTime dateC = LocalDateTime.of(2026, 5, 27, 10, 0);
         LocalDateTime dateM = LocalDateTime.of(2026, 5, 27, 12, 0);
-        Epreuve epreuve = new Epreuve();
+        List<Epreuve> epreuves = new ArrayList<>();
         List<Etudiant> etudiants = new ArrayList<>();
         List<Fraude> fraudes = new ArrayList<>();
 
-        Formulaire form = new Formulaire(10, dateC, dateM, epreuve, etudiants, fraudes);
+        Formulaire form = new Formulaire(10, dateC, dateM, epreuves, etudiants, fraudes);
 
         assertEquals(10, form.getId());
         assertEquals(dateC, form.getDateCreation());
         assertEquals(dateM, form.getDateDerniereModification());
-        assertEquals(epreuve, form.getEpreuve());
+        assertEquals(epreuves, form.getEpreuve());
         assertEquals(etudiants, form.getEtudiants());
         assertEquals(fraudes, form.getFraudes());
     }

@@ -12,10 +12,8 @@ public class Main {
         SystemeGestion systeme = SystemeGestion.charger(FICHIER_DATA);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("\n[Fermeture] Enregistrement des données sur l'ordinateur...");
             systeme.sauvegarder(FICHIER_DATA);
             systeme.getJournal().exporterEnTexte(CHEMIN_LOGS);
-            System.out.println("[Fermeture] Fichiers mis à jour avec succès.");
         }));
 
         ConsoleUI interfaceConsole = new ConsoleUI(systeme);

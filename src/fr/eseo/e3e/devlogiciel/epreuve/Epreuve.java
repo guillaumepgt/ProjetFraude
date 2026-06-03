@@ -1,5 +1,6 @@
 package fr.eseo.e3e.devlogiciel.epreuve;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,6 +10,7 @@ import java.time.LocalTime;
  * Cette classe définit les caractéristiques d'une épreuve.
  */
 public class Epreuve implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      * Modalite
@@ -16,10 +18,10 @@ public class Epreuve implements Serializable {
      */
     public enum Modalite {
         EXAMEN_ECRIT, /**Examen au format papier*/
-        ORAL, /** Epreuve Oral devant un jury*/
+        ORAL, /** Épreuve Oral devant un jury*/
         QCM, /** Questionnaire à choix multiples*/
-        SUR_ORDINATEUR, /**Epreuve sur machine*/
-        PROJET, /**Rendu ou soutenance de projet*/
+        SUR_ORDINATEUR, /** Épreuve sur machine*/
+        PROJET, /** Rendu ou soutenance de projet*/
         TP /** Evaluation de travaux pratiques*/
     }
 
