@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Classe de test pour la classe FraudeIAG.
@@ -22,7 +23,7 @@ public class FraudeIAGTest {
 
     @Test
     void testConstructeur() {
-        assertEquals("", fraude1.getNomService());
+        assertNull(fraude1.getNomService());
     }
 
     @Test

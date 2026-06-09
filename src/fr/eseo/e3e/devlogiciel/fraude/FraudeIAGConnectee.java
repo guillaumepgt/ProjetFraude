@@ -1,5 +1,7 @@
 package fr.eseo.e3e.devlogiciel.fraude;
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
 import java.time.LocalDate;
 
 /**
@@ -18,7 +20,7 @@ public class FraudeIAGConnectee extends FraudeIAG {
      */
     public FraudeIAGConnectee() {
         super();
-        this.adresseIP = "127.0.0.1";
+        Logger.info("Création d'une Fraude IAG connectée vide (constructeur par défaut).");
     }
 
     /**
@@ -33,6 +35,7 @@ public class FraudeIAGConnectee extends FraudeIAG {
     public FraudeIAGConnectee(LocalDate dateReleve, String description, String contenu, String nomService, String adresseIP) {
         super(dateReleve, description, contenu, nomService);
         this.setAdresseIP(adresseIP);
+        Logger.succes("Fraude IAG connectée via l'adresse ip '" + this.adresseIP  + "' initialisé avec succès.");
     }
 
     /**

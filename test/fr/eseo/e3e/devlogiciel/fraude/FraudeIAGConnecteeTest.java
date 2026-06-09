@@ -9,7 +9,7 @@ public class FraudeIAGConnecteeTest {
     @Test
     void testConstructeursEtGetters() {
         FraudeIAGConnectee f1 = new FraudeIAGConnectee();
-        assertEquals("127.0.0.1", f1.getAdresseIP());
+        assertNull(f1.getAdresseIP());
 
         FraudeIAGConnectee f2 = new FraudeIAGConnectee(LocalDate.now(), "Utilise IA", "Code genere", "ChatGPT", "192.168.1.1");
         assertEquals("192.168.1.1", f2.getAdresseIP());

@@ -9,9 +9,9 @@ class FraudeCalculatriceTest {
     @Test
     void testConstructeursEtGetters() {
         FraudeCalculatrice f1 = new FraudeCalculatrice();
-        assertEquals("Casio", f1.getMarque());
-        assertEquals("", f1.getProgramme());
-        assertEquals(LocalDate.now(), f1.getDateReleve());
+        assertNull(f1.getMarque());
+        assertNull(f1.getProgramme());
+        assertNull(f1.getDateReleve());
 
         FraudeCalculatrice f2 = new FraudeCalculatrice(LocalDate.now(), "Affiche formule", "Matrices", "TI", "Stats");
         assertEquals("TI", f2.getMarque());

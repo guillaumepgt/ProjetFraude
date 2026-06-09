@@ -1,5 +1,7 @@
 package fr.eseo.e3e.devlogiciel.fraude;
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
 import java.time.LocalDate;
 
 /**
@@ -18,7 +20,7 @@ public abstract class FraudeIAG extends Fraude {
      */
     public FraudeIAG() {
         super();
-        this.nomService = "";
+        Logger.info("Création d'une Fraude IAG vide (constructeur par défaut).");
     }
 
     /**
@@ -32,6 +34,7 @@ public abstract class FraudeIAG extends Fraude {
     public FraudeIAG(LocalDate dateReleve, String description, String contenu, String nomService) {
         super(dateReleve, description, contenu);
         this.setNomService(nomService);
+        Logger.succes("Fraude IAG de " + this.nomService + " initialisé avec succès.");
     }
 
     /**

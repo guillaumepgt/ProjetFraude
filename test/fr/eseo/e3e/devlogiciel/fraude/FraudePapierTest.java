@@ -9,7 +9,7 @@ public class FraudePapierTest {
     @Test
     void testConstructeursEtGetters() {
         FraudePapier f1 = new FraudePapier();
-        assertEquals("", f1.getDimensions());
+        assertNull( f1.getDimensions());
         assertFalse(f1.getEstPlie());
 
         FraudePapier f2 = new FraudePapier(LocalDate.now(), "A cache un brouillon", "Formules", "A5", true);

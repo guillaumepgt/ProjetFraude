@@ -1,5 +1,8 @@
 package fr.eseo.e3e.devlogiciel.journalhistorique;
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -7,6 +10,7 @@ import java.time.LocalDateTime;
  * Représente une entrée (une action tracée) dans le journal d'historique du système.
  */
 public class EntreeHistorique implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -27,6 +31,8 @@ public class EntreeHistorique implements Serializable {
         this.action= "Action non spécifiée";
 
     }
+
+
     /**
      * Crée une nouvelle entrée d'historique à l'instant présent.
      *

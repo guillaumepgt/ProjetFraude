@@ -1,5 +1,7 @@
 package fr.eseo.e3e.devlogiciel.fraude;
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
 import java.time.LocalDate;
 
 /**
@@ -22,8 +24,7 @@ public class FraudePapier extends Fraude {
      */
     public FraudePapier()  {
         super();
-        this.dimensions = "";
-        this.estPlie = false;
+        Logger.info("Création d'une Fraude Papier vide (constructeur par défaut).");
     }
 
     /**
@@ -39,6 +40,7 @@ public class FraudePapier extends Fraude {
         super(dateReleve, description, contenu);
         this.setDimensions(dimensions);
         this.setEstPlie(estPlie);
+        Logger.succes("Fraude Papier du " + this.getDateReleve() + " initialisé avec succès.");
     }
 
     /**
