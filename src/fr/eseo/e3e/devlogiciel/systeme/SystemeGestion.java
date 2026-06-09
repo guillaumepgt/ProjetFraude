@@ -21,7 +21,7 @@ import java.util.List;
  * Elle gère les listes de formulaires, d'étudiants, et le journal d'historique.
  * Implémente Serializable pour permettre la sauvegarde dans un fichier binaire.
  */
-public class SystemeGestion implements Serializable {
+public class SystemeGestion implements Serializable, IAnalyseStatistique {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -47,12 +47,18 @@ public class SystemeGestion implements Serializable {
 
     /**
      * Ajoute un nouveau formulaire dans la liste et trace l'action.
+     * Met également à jour la liste globale des étudiants si nécessaire.
      *
      * @param f Le formulaire de fraude à enregistrer
      */
     public void enregistrerFormulaire(Formulaire f) {
         if (f != null) {
             this.formulaires.add(f);
+            for (Etudiant etu : f.getEtudiants()) {
+                if (!this.etudiants.contains(etu)) {
+                    this.etudiants.add(etu);
+                }
+            }
             this.journal.ajouterEntree("Enregistrement du formulaire ID : " + f.getId());
             Logger.succes("Formulaire ID " + f.getId() + " enregistré dans le système.");
         } else {
@@ -84,6 +90,69 @@ public class SystemeGestion implements Serializable {
             this.journal.ajouterEntree("Tentative échouée de suppression du formulaire ID : " + id);
             throw new FraudeException("Aucun dossier trouvé avec l'ID " + id + ".");
         }
+    }
+
+    /**
+     * Retrouve tous les formulaires impliquant un étudiant donné par son ID.
+     * @param numeroApprenant Le numéro de l'étudiant
+     * @return Liste de formulaires
+     */
+    public List<Formulaire> trouverFormulairesParEtudiant(String numeroApprenant) {
+        List<Formulaire> resultats = new ArrayList<>();
+        for (Formulaire f : formulaires) {
+            for (Etudiant e : f.getEtudiants()) {
+                if (e.getId().equals(numeroApprenant)) {
+                    resultats.add(f);
+                    break;
+                }
+            }
+        }
+        return resultats;
+    }
+
+    /**
+     * Retrouve tous les formulaires concernant une épreuve donnée par son code ECUE.
+     * @param codeECUE Le code de l'épreuve
+     * @return Liste de formulaires
+     */
+    public List<Formulaire> trouverFormulairesParEpreuve(String codeECUE) {
+        List<Formulaire> resultats = new ArrayList<>();
+        for (Formulaire f : formulaires) {
+            if (f.getEpreuve() != null && f.getEpreuve().getCodeECUE().equals(codeECUE)) {
+                resultats.add(f);
+            }
+        }
+        return resultats;
+    }
+
+    /**
+     * Recherche des étudiants par nom ou par prénom.
+     * @param recherche La chaîne de recherche
+     * @return Liste d'étudiants
+     */
+    public List<Etudiant> rechercherEtudiantsParNomPrenom(String recherche) {
+        List<Etudiant> resultats = new ArrayList<>();
+        String query = recherche.toLowerCase();
+        for (Etudiant e : etudiants) {
+            if (e.getNom().toLowerCase().contains(query) || e.getPrenom().toLowerCase().contains(query)) {
+                resultats.add(e);
+            }
+        }
+        return resultats;
+    }
+
+    /**
+     * Retrouve un étudiant précis par son numéro apprenant.
+     * @param numeroApprenant Le numéro unique
+     * @return L'étudiant ou null
+     */
+    public Etudiant trouverEtudiantParId(String numeroApprenant) {
+        for (Etudiant e : etudiants) {
+            if (e.getId().equals(numeroApprenant)) {
+                return e;
+            }
+        }
+        return null;
     }
 
     /**
@@ -122,6 +191,43 @@ public class SystemeGestion implements Serializable {
         this.journal.ajouterEntree("Recherche croisée effectuée pour le cursus " + cursus + " et le type " + typeFraude.getSimpleName());
         Logger.info("Recherche croisée terminée : " + resultats.size() + " résultat(s) trouvé(s).");
         return resultats;
+    }
+
+    @Override
+    public int getNombreTotalFormulaires() {
+        return formulaires.size();
+    }
+
+    @Override
+    public int getNombreEtudiantsDistincts() {
+        return etudiants.size();
+    }
+
+    @Override
+    public int getNombreTotalFraudes() {
+        int total = 0;
+        for (Formulaire f : formulaires) {
+            total += f.getFraudes().size();
+        }
+        return total;
+    }
+
+    @Override
+    public double getMoyenneFraudesParFormulaire() {
+        if (formulaires.isEmpty()) return 0.0;
+        return (double) getNombreTotalFraudes() / formulaires.size();
+    }
+
+    @Override
+    public double getEcartTypeFraudesParFormulaire() {
+        if (formulaires.isEmpty()) return 0.0;
+        double moyenne = getMoyenneFraudesParFormulaire();
+        double sommeCarres = 0;
+        for (Formulaire f : formulaires) {
+            double nbFraudes = f.getFraudes().size();
+            sommeCarres += Math.pow(nbFraudes - moyenne, 2);
+        }
+        return Math.sqrt(sommeCarres / formulaires.size());
     }
 
     /**

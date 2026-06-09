@@ -56,7 +56,7 @@ public class JournalHistorique implements Serializable {
 
     /**
      * Exporte l'ensemble des entrées du journal dans un fichier texte physique.
-     * * @param cheminFichier Le chemin ou le nom du fichier de destination
+     * @param cheminFichier Le chemin ou le nom du fichier de destination
      */
     public void exporterEnTexte(String cheminFichier) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(cheminFichier))) {

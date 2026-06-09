@@ -14,7 +14,7 @@ public class Logger {
 
     /**
      * Affiche un message d'information standard dans la console.
-     * * @param message Le message d'information à afficher
+     * @param message Le message d'information à afficher
      */
     public static void info(String message) {
         System.out.println("[INFO] " + message);
@@ -22,7 +22,7 @@ public class Logger {
 
     /**
      * Affiche un message confirmant le succès d'une opération.
-     * * @param message Le message de succès à afficher
+     * @param message Le message de succès à afficher
      */
     public static void succes(String message) {
         System.out.println("[OK] " + message);
@@ -30,7 +30,7 @@ public class Logger {
 
     /**
      * Affiche un message d'avertissement pour signaler un comportement inattendu mais non bloquant.
-     * * @param message Le message d'avertissement à afficher
+     * @param message Le message d'avertissement à afficher
      */
     public static void avertissement(String message) {
         System.out.println("[ATTENTION] " + message);
@@ -39,7 +39,7 @@ public class Logger {
     /**
      * Affiche un message d'erreur critique dans la console.
      * Utilise le flux d'erreur standard (System.err).
-     * * @param message Le message d'erreur à afficher
+     * @param message Le message d'erreur à afficher
      */
     public static void erreur(String message) {
         System.err.println("[ERREUR] " + message);
