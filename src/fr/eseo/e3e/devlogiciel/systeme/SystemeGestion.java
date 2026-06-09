@@ -350,8 +350,4 @@ public class SystemeGestion implements Serializable, IAnalyseStatistique {
             this.journal.ajouterEntree("Initialisation du jeu de données de test (Bouchonnage) terminée.");
         }
     }
-
-    public List<Formulaire> getFormulaires() { return formulaires; }
-    public List<Etudiant> getEtudiants() { return etudiants; }
-    public JournalHistorique getJournal() { return journal; }
 }
