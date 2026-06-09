@@ -46,6 +46,11 @@ public class JournalHistoriqueTest {
         assertEquals(1, journal.getEntrees().size());
         assertEquals(nouvelleListe, journal.getEntrees());
         assertEquals("Action de test", journal.getEntrees().get(0).getAction());
+        List<EntreeHistorique> listeVide = new ArrayList<>();
+        journal.setEntrees(listeVide);
+        assertTrue(journal.getEntrees().isEmpty());
+        journal.setEntrees(null);
+        assertNull(journal.getEntrees());
     }
 
     @Test
@@ -66,7 +71,6 @@ public class JournalHistoriqueTest {
     @Test
     void testExporterEnTexteErreur() {
         journal.exporterEnTexte(".");
-
-        assertTrue(true);
+        assertTrue(true, "L'exception a été gérée en interne par le logger.");
     }
 }

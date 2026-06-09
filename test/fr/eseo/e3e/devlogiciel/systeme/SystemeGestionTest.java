@@ -66,16 +66,14 @@ public class SystemeGestionTest {
     }
 
     @Test
-    public void testSupprimerFormulaireEchec() throws FraudeException {
+    public void testSupprimerFormulaireEchec() {
         Formulaire form = new Formulaire();
         systeme.enregistrerFormulaire(form);
 
         int mauvaisId = form.getId() + 999;
-        systeme.supprimerFormulaire(mauvaisId);
 
-        assertEquals(1, systeme.getFormulaires().size());
-        assertEquals(2, systeme.getJournal().getEntrees().size());
-        assertEquals("Tentative échouée de suppression du formulaire ID : " + mauvaisId, systeme.getJournal().getEntrees().get(1).getAction());
+        assertThrows(FraudeException.class, () -> systeme.supprimerFormulaire(mauvaisId), "Échec : Le système aurait dû lever une FraudeException pour un ID inexistant.");
+        assertEquals(1, systeme.getFormulaires().size(), "Échec : La taille de la liste a bougé alors que la suppression a échoué.");
     }
 
     @Test

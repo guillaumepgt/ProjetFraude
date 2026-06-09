@@ -1,5 +1,7 @@
 package fr.eseo.e3e.devlogiciel.fraude;
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
 import java.time.LocalDate;
 
 /**
@@ -22,8 +24,7 @@ public class FraudeCalculatrice extends Fraude{
      */
     public FraudeCalculatrice() {
         super();
-        this.marque = "Casio";
-        this.programme = "";
+        Logger.info("Création d'une Fraude avec une Calculatrice vide (constructeur par défaut).");
     }
 
     /**
@@ -39,6 +40,7 @@ public class FraudeCalculatrice extends Fraude{
         super(dateReleve, description, contenu);
         this.setMarque(marque);
         this.setProgramme(programme);
+        Logger.succes("Fraude avec une calculatrice initialisé avec succès.");
     }
 
     /**

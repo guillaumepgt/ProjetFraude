@@ -4,6 +4,7 @@ import fr.eseo.e3e.devlogiciel.epreuve.Epreuve;
 import fr.eseo.e3e.devlogiciel.etudiant.Etudiant;
 import fr.eseo.e3e.devlogiciel.fraude.Fraude;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,12 +14,13 @@ import java.util.List;
  * Représente un formulaire de relevé de fraudes lors d'une épreuve.
  */
 public class Formulaire implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private static int compteurId = 0;
     private final int id;
     private final LocalDateTime dateCreation;
     private LocalDateTime dateDerniereModification;
-    private final List<Epreuve> epreuves;
+    private Epreuve epreuve; // CORRECTION : Une seule épreuve par formulaire
     private final List<Etudiant> etudiants;
     private final List<Fraude> fraudes;
 
@@ -26,12 +28,12 @@ public class Formulaire implements Serializable {
      * Crée un nouveau formulaire vide avec des informations par défaut.
      */
     public Formulaire(){
-        this.id=++compteurId;
-        this.dateCreation=LocalDateTime.now();
-        this.dateDerniereModification=this.dateCreation;
-        this.epreuves=new ArrayList<Epreuve>();
-        this.etudiants= new ArrayList<>();
-        this.fraudes=new ArrayList<Fraude>();
+        this.id = ++compteurId;
+        this.dateCreation = LocalDateTime.now();
+        this.dateDerniereModification = this.dateCreation;
+        this.epreuve = null; // Initialisé à null par défaut
+        this.etudiants = new ArrayList<>();
+        this.fraudes = new ArrayList<>();
     }
 
     /**
@@ -40,21 +42,21 @@ public class Formulaire implements Serializable {
      * @param id                        L'identifiant du formulaire
      * @param dateCreation              La date de création
      * @param dateDerniereModification  La date de la dernière modification
-     * @param epreuves                   L'épreuve concernée
+     * @param epreuve                   L'épreuve concernée
      * @param etudiants                 La liste des étudiants impliqués
      * @param fraudes                   La liste des fraudes relevées
      */
-    public Formulaire(int id, LocalDateTime dateCreation, LocalDateTime dateDerniereModification, List<Epreuve> epreuves, List<Etudiant> etudiants, List<Fraude> fraudes){
-        this.id=id;
-        this.dateCreation=dateCreation;
-        this.dateDerniereModification=dateDerniereModification;
-        this.epreuves=epreuves;
-        this.etudiants=etudiants;
-        this.fraudes=fraudes;
+    public Formulaire(int id, LocalDateTime dateCreation, LocalDateTime dateDerniereModification, Epreuve epreuve, List<Etudiant> etudiants, List<Fraude> fraudes){
+        this.id = id;
+        this.dateCreation = dateCreation;
+        this.dateDerniereModification = dateDerniereModification;
+        this.epreuve = epreuve;
+        this.etudiants = etudiants;
+        this.fraudes = fraudes;
     }
 
     private void actualiserDateModification(){
-        this.dateDerniereModification=LocalDateTime.now();
+        this.dateDerniereModification = LocalDateTime.now();
     }
 
     /**
@@ -78,12 +80,12 @@ public class Formulaire implements Serializable {
     }
 
     /**
-     * Ajouter une épreuve au formulaire
+     * Définit l'épreuve concernée par le formulaire.
      *
-     * @param epreuves L'épreuve à ajouter
+     * @param epreuve L'épreuve à lier au formulaire
      */
-    public void ajouterEpreuve(Epreuve epreuves){
-        this.epreuves.add(epreuves);
+    public void setEpreuve(Epreuve epreuve){
+        this.epreuve = epreuve;
         actualiserDateModification();
     }
 
@@ -101,8 +103,8 @@ public class Formulaire implements Serializable {
      *
      * @return L'épreuve
      */
-    public List<Epreuve> getEpreuve(){
-        return epreuves;
+    public Epreuve getEpreuve(){
+        return epreuve;
     }
 
     /**

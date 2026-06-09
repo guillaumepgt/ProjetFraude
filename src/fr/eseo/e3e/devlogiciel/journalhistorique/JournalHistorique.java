@@ -1,9 +1,8 @@
 package fr.eseo.e3e.devlogiciel.journalhistorique;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,7 @@ import java.util.List;
  * Représente le journal d'historique contenant toutes les traces du système.
  */
 public class JournalHistorique implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -23,6 +23,7 @@ public class JournalHistorique implements Serializable {
      */
     public JournalHistorique() {
         this.entrees = new ArrayList<>();
+        Logger.info("Création d'un journal d'historique vide (constructeur par défaut).");
     }
 
     /**
@@ -53,6 +54,10 @@ public class JournalHistorique implements Serializable {
         this.entrees = entrees;
     }
 
+    /**
+     * Exporte l'ensemble des entrées du journal dans un fichier texte physique.
+     * * @param cheminFichier Le chemin ou le nom du fichier de destination
+     */
     public void exporterEnTexte(String cheminFichier) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(cheminFichier))) {
             for (EntreeHistorique entree : entrees) {
@@ -60,7 +65,7 @@ public class JournalHistorique implements Serializable {
                 writer.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.erreur("Impossible d'exporter le journal historique : " + e.getMessage());
         }
     }
 }

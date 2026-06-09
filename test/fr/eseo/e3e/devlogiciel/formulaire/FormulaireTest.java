@@ -20,7 +20,7 @@ class FormulaireTest {
         assertTrue(form.getId() > 0);
         assertNotNull(form.getDateCreation());
         assertEquals(form.getDateCreation(), form.getDateDerniereModification());
-        assertNotNull(form.getEpreuve());
+        assertNull(form.getEpreuve()); // Modifié : l'épreuve est null par défaut
         assertNotNull(form.getEtudiants());
         assertTrue(form.getEtudiants().isEmpty());
         assertNotNull(form.getFraudes());
@@ -31,16 +31,16 @@ class FormulaireTest {
     void testConstructeurParametre() {
         LocalDateTime dateC = LocalDateTime.of(2026, 5, 27, 10, 0);
         LocalDateTime dateM = LocalDateTime.of(2026, 5, 27, 12, 0);
-        List<Epreuve> epreuves = new ArrayList<>();
+        Epreuve epreuve = new Epreuve(); // Modifié : un seul objet Epreuve
         List<Etudiant> etudiants = new ArrayList<>();
         List<Fraude> fraudes = new ArrayList<>();
 
-        Formulaire form = new Formulaire(10, dateC, dateM, epreuves, etudiants, fraudes);
+        Formulaire form = new Formulaire(10, dateC, dateM, epreuve, etudiants, fraudes);
 
         assertEquals(10, form.getId());
         assertEquals(dateC, form.getDateCreation());
         assertEquals(dateM, form.getDateDerniereModification());
-        assertEquals(epreuves, form.getEpreuve());
+        assertEquals(epreuve, form.getEpreuve()); // Modifié
         assertEquals(etudiants, form.getEtudiants());
         assertEquals(fraudes, form.getFraudes());
     }
@@ -72,6 +72,20 @@ class FormulaireTest {
 
         assertEquals(1, form.getFraudes().size());
         assertEquals(fraude, form.getFraudes().get(0));
+        assertTrue(form.getDateDerniereModification().isAfter(dateAvant));
+    }
+
+    @Test
+    void testSetEpreuve() throws InterruptedException {
+        Formulaire form = new Formulaire();
+        LocalDateTime dateAvant = form.getDateDerniereModification();
+
+        Thread.sleep(10);
+
+        Epreuve epreuve = new Epreuve();
+        form.setEpreuve(epreuve);
+
+        assertEquals(epreuve, form.getEpreuve());
         assertTrue(form.getDateDerniereModification().isAfter(dateAvant));
     }
 }

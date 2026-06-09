@@ -1,5 +1,8 @@
 package fr.eseo.e3e.devlogiciel.fraude;
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
+import java.io.Serial;
 import java.time.LocalDate;
 import java.io.Serializable;
 
@@ -8,6 +11,7 @@ import java.io.Serializable;
  * Contient les informations de la fraude et des preuves
  */
 public abstract class Fraude implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,9 +33,7 @@ public abstract class Fraude implements Serializable {
      * Crée une nouvelle fraude avec des informations par défaut.
      */
     public Fraude() {
-        this.dateReleve = LocalDate.now();
-        this.description = "";
-        this.contenu = "";
+        Logger.info("Création d'une Fraude vide (constructeur par défaut).");
     }
 
     /**
@@ -45,6 +47,7 @@ public abstract class Fraude implements Serializable {
         this.dateReleve = dateReleve;
         this.description = description;
         this.contenu = contenu;
+        Logger.succes("Fraude " + this.description + " du " + this.dateReleve + " initialisé avec succès.");
     }
     /**
      * Récupère la date de la fraude

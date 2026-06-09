@@ -1,5 +1,7 @@
 package fr.eseo.e3e.devlogiciel.epreuve;
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,6 +14,7 @@ import java.time.LocalTime;
 public class Epreuve implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
     /**
      * Modalite
      * Enumération du type d'épreuve
@@ -39,10 +42,12 @@ public class Epreuve implements Serializable {
      * Heure de l'épreuve
      */
     private LocalTime heurePassage;
+
     /**
      * Durée de l'épreuve
      */
     private int duree;
+
     /**
      * Modalité de l'épreuve
      */
@@ -53,6 +58,7 @@ public class Epreuve implements Serializable {
      * Initialise une instance d'épreuve sans valeur par défaut.
      */
     public Epreuve() {
+        Logger.info("Création d'une épreuve vide (constructeur par défaut).");
     }
 
     /**
@@ -64,11 +70,12 @@ public class Epreuve implements Serializable {
      * @param modalite La modalité d'évaluation de l'épreuve
      */
     public Epreuve(String codeECUE, LocalDate date, LocalTime heurePassage, int duree, Modalite modalite) {
-        this.codeECUE = codeECUE;
-        this.date = date;
-        this.heurePassage = heurePassage;
-        this.duree = duree;
-        this.modalite = modalite;
+        this.setCodeECUE(codeECUE);
+        this.setDate(date);
+        this.setHeurePassage(heurePassage);
+        this.setDuree(duree);
+        this.setModalite(modalite);
+        Logger.succes("Épreuve " + this.codeECUE + " initialisée avec succès.");
     }
 
     /**
@@ -84,6 +91,9 @@ public class Epreuve implements Serializable {
      * @param codeECUE Le nouveau code de l'épreuve.
      */
     public void setCodeECUE(String codeECUE) {
+        if (codeECUE == null || codeECUE.trim().isEmpty()) {
+            Logger.avertissement("Attribution d'un code ECUE vide à l'épreuve.");
+        }
         this.codeECUE = codeECUE;
     }
 
@@ -132,6 +142,9 @@ public class Epreuve implements Serializable {
      * @param duree La nouvelle durée (en minutes).
      */
     public void setDuree(int duree) {
+        if (duree <= 0) {
+            Logger.avertissement("La durée assignée à l'épreuve (" + duree + " min) est invalide ou nulle.");
+        }
         this.duree = duree;
     }
 

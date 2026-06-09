@@ -1,6 +1,9 @@
 package fr.eseo.e3e.devlogiciel.etudiant;
 
 
+import fr.eseo.e3e.devlogiciel.utils.Logger;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -8,6 +11,7 @@ import java.io.Serializable;
  * Contient les informations personnelles et les détails d'identification.
  */
 public class Etudiant implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -46,10 +50,7 @@ public class Etudiant implements Serializable {
      * Crée un nouvel étudiant avec des informations par défaut.
      */
     public Etudiant() {
-        this.nom = "Peloin";
-        this.prenom = "Titouan";
-        this.numeroApprenant = "1";
-        this.cursus = Cursus.E3e;
+        Logger.info("Création d'un Étudiant vide (constructeur par défaut).");
     }
 
     /**
@@ -65,6 +66,7 @@ public class Etudiant implements Serializable {
         this.setPrenom(prenom);
         this.setId(numeroApprenant);
         this.setCursus(cursus);
+        Logger.succes("Étudiant " + this.prenom + " " + this.nom + " (" + this.numeroApprenant + ") initialisé avec succès.");
     }
 
     /**
