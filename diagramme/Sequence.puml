@@ -1,46 +1,55 @@
 @startuml
+skinparam monochrome true
+skinparam shadowing false
 
 actor "Utilisateur\n(Gestionnaire)" as User
-participant "InterfaceTextuelle" as UI
-participant "SystemeGestion" as Sys
+participant "ConsoleUI" as UI
 participant "form: Formulaire" as Form
+participant "systeme: SystemeGestion" as Sys
 participant "journal: JournalHistorique" as Journal
+participant "Logger" as Log
 
-User -> UI : 1. Sélectionner "Ajouter un formulaire"
+User -> UI : 1. Sélectionner "Créer un nouveau dossier"
 activate UI
 
-UI -> Sys : recupererEpreuvesDisponibles()
-activate Sys
-Sys --> UI : listeEpreuves
-deactivate Sys
+UI -> Form ** : new Formulaire()
 
-UI --> User : Afficher liste des épreuves
-User -> UI : Sélectionner une épreuve
-UI -> Form ** : creerFormulaire(epreuve)
+== 1. Saisie de l'Épreuve ==
+UI --> User : Demander infos (Code ECUE, Date, Durée...)
+User -> UI : Saisir les informations
+UI -> Form : setEpreuve(new Epreuve(...))
 
+== 2. Saisie des Étudiants ==
 loop Pour chaque étudiant impliqué
-    UI -> Sys : trouverOuCreerEtudiant(numeroApprenant)
-    activate Sys
-    Sys --> UI : etudiant
-    deactivate Sys
-    UI -> Form : ajouterEtudiant(etudiant)
+    UI --> User : Demander infos (Nom, Prénom, ID...)
+    User -> UI : Saisir les informations
+    UI -> Form : ajouterEtudiant(new Etudiant(...))
 end
 
+== 3. Saisie des Fraudes ==
 loop Pour chaque fraude constatée
-    UI -> UI : creerFraudeSpecifique(...)
-    UI -> Form : ajouterFraude(fraude)
+    UI --> User : Demander détails (Support, Description...)
+    User -> UI : Saisir les informations
+    UI -> Form : ajouterFraude(nouvelle Fraude spécifique)
 end
 
+== Enregistrement ==
 UI -> Sys : enregistrerFormulaire(form)
 activate Sys
-Sys -> Journal : ajouterEntree("Création du formulaire " + form.id)
+
+Sys -> Sys : Ajouter form à la liste interne
+Sys -> Sys : Mettre à jour la liste globale des étudiants
+
+Sys -> Journal : ajouterEntree("Enregistrement du formulaire ID : " + form.getId())
 activate Journal
-Journal --> Sys : ok
+Journal --> Sys :
 deactivate Journal
-Sys --> UI : confirmation
+
+Sys -> Log : succes("Formulaire enregistré dans le système")
+Sys --> UI :
 deactivate Sys
 
-UI --> User : Afficher confirmation d'ajout
+UI --> User : Afficher confirmation d'ajout en console
 deactivate UI
 
 @enduml

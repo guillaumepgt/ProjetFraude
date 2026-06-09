@@ -1,0 +1,48 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+actor "Utilisateur\n(Gestionnaire)" as User
+participant "ConsoleUI" as UI
+participant "systeme: SystemeGestion" as Sys
+participant "graphe: HashMap" as Map
+participant "Logger" as Log
+
+User -> UI : 8. Sélectionner "Analyser le réseau"
+activate UI
+
+== 1. Représentation du graphe ==
+UI -> Sys : genererGrapheTricheurs()
+activate Sys
+Sys -> Map ** : new HashMap<Etudiant, List<Etudiant>>()
+
+loop Pour chaque Formulaire
+    loop Pour chaque paire d'Étudiants (e1, e2)
+        Sys -> Map : putIfAbsent(e1)
+        Sys -> Map : add(e2) conditionnel (contains)
+    end
+end
+
+Sys --> UI : graphe généré
+deactivate Sys
+UI --> User : Afficher représentation textuelle des liens
+
+== 2. Recherche du Cerveau ==
+UI -> Sys : trouverTricheurLePlusConnecte()
+activate Sys
+Sys -> Sys : genererGrapheTricheurs() (Appel interne)
+loop Pour chaque Map.Entry du graphe
+    Sys -> Sys : Comparer la taille de la liste (maxConnexions)
+end
+Sys --> UI : suspect (Etudiant)
+deactivate Sys
+
+alt suspect identifié et réseau non vide
+    UI -> Log : succes("Le cerveau présumé a été identifié !")
+    UI --> User : Afficher Nom, Prénom et Cursus du cerveau
+else Aucun lien détecté
+    UI -> Log : info("Le réseau n'a pas de connexions croisées.")
+end
+
+deactivate UI
+@enduml

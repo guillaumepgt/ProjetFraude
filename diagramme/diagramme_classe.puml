@@ -3,6 +3,19 @@ skinparam classAttributeIconSize 0
 skinparam monochrome true
 skinparam shadowing false
 
+package "fr.eseo.e3e.devlogiciel.utils" {
+  class Logger {
+    - Logger()
+    + {static} info(message: String)
+    + {static} succes(message: String)
+    + {static} avertissement(message: String)
+    + {static} erreur(message: String)
+  }
+
+  class FraudeException <<Exception>> {
+    + FraudeException(message: String)
+  }
+}
 
 package "fr.eseo.e3e.devlogiciel.etudiant" {
   enum Cursus {
@@ -15,12 +28,22 @@ package "fr.eseo.e3e.devlogiciel.etudiant" {
   }
 
   class Etudiant {
-    - numeroApprenant : String
     - nom : String
     - prenom : String
+    - numeroApprenant : String
     - cursus : Cursus
     + Etudiant()
-    + Etudiant(numeroApprenant: String, nom: String, prenom: String, cursus: Cursus)
+    + Etudiant(nom: String, prenom: String, numeroApprenant: String, cursus: Cursus)
+    + getNom(): String
+    + setNom(nom: String)
+    + getPrenom(): String
+    + setPrenom(prenom: String)
+    + getId(): String
+    + setId(numeroApprenant: String)
+    + getCursus(): Cursus
+    + setCursus(cursus: Cursus)
+    + equals(o: Object): boolean
+    + hashCode(): int
   }
 }
 
@@ -42,11 +65,22 @@ package "fr.eseo.e3e.devlogiciel.epreuve" {
     - modalite : Modalite
     + Epreuve()
     + Epreuve(codeECUE: String, date: LocalDate, heurePassage: LocalTime, duree: int, modalite: Modalite)
+    + getCodeECUE(): String
+    + setCodeECUE(codeECUE: String)
+    + getDate(): LocalDate
+    + setDate(date: LocalDate)
+    + getHeurePassage(): LocalTime
+    + setHeurePassage(heurePassage: LocalTime)
+    + getDuree(): int
+    + setDuree(duree: int)
+    + getModalite(): Modalite
+    + setModalite(modalite: Modalite)
   }
 }
 
 package "fr.eseo.e3e.devlogiciel.formulaire" {
   class Formulaire {
+    - {static} compteurId : int
     - id : int
     - dateCreation : LocalDateTime
     - dateDerniereModification : LocalDateTime
@@ -55,23 +89,39 @@ package "fr.eseo.e3e.devlogiciel.formulaire" {
     - fraudes : List<Fraude>
     - actualiserDateModification()
     + Formulaire()
-    + Formulaire(epreuve: Epreuve, etudiants: List<Etudiant>, fraudes: List<Fraude>)
-    + ajouterEtudiant(e: Etudiant)
-    + ajouterFraude(f: Fraude)
+    + Formulaire(id: int, dateCreation: LocalDateTime, dateDerniereModification: LocalDateTime, epreuve: Epreuve, etudiants: List<Etudiant>, fraudes: List<Fraude>)
+    + ajouterEtudiant(etudiant: Etudiant)
+    + ajouterFraude(fraude: Fraude)
+    + setEpreuve(epreuve: Epreuve)
+    + getId(): int
+    + getEpreuve(): Epreuve
+    + getEtudiants(): List<Etudiant>
+    + getFraudes(): List<Fraude>
+    + getDateCreation(): LocalDateTime
+    + getDateDerniereModification(): LocalDateTime
   }
 }
 
 package "fr.eseo.e3e.devlogiciel.journalhistorique" {
   class JournalHistorique {
     - entrees : List<EntreeHistorique>
+    + JournalHistorique()
+    + JournalHistorique(entrees: List<EntreeHistorique>)
     + ajouterEntree(description: String)
+    + getEntrees(): List<EntreeHistorique>
+    + setEntrees(entrees: List<EntreeHistorique>)
     + exporterEnTexte(cheminFichier: String)
   }
 
   class EntreeHistorique {
     - horodatage : LocalDateTime
     - action : String
-    + entreeHistorique(action: String)
+    + EntreeHistorique()
+    + EntreeHistorique(action: String)
+    + getHorodatage(): LocalDateTime
+    + setHorodatage(horodatage: LocalDateTime)
+    + getAction(): String
+    + setAction(action: String)
   }
 }
 
@@ -82,29 +132,62 @@ package "fr.eseo.e3e.devlogiciel.fraude" {
     - contenu : String
     + Fraude()
     + Fraude(dateReleve: LocalDate, description: String, contenu: String)
+    + getDateReleve(): LocalDate
+    + setDateReleve(dateReleve: LocalDate)
+    + getContenu(): String
+    + setContenu(contenu: String)
+    + getDescription(): String
+    + setDescription(description: String)
   }
 
-  class FraudeIAG {
+  abstract class FraudeIAG {
     - nomService : String
     + FraudeIAG()
+    + FraudeIAG(dateReleve: LocalDate, description: String, contenu: String, nomService: String)
+    + getNomService(): String
+    + setNomService(nomService: String)
   }
 
   class FraudePapier {
     - dimensions : String
     - estPlie : boolean
+    + FraudePapier()
+    + FraudePapier(dateReleve: LocalDate, description: String, contenu: String, dimensions: String, estPlie: boolean)
+    + getDimensions(): String
+    + setDimensions(dimensions: String)
+    + getEstPlie(): boolean
+    + setEstPlie(estPlie: boolean)
   }
 
   class FraudeCalculatrice {
     - marque : String
     - programme : String
+    + FraudeCalculatrice()
+    + FraudeCalculatrice(dateReleve: LocalDate, description: String, contenu: String, marque: String, programme: String)
+    + getMarque(): String
+    + setMarque(marque: String)
+    + getProgramme(): String
+    + setProgramme(programme: String)
   }
 
   class FraudeIAGConnectee {
     - adresseIP : String
+    + FraudeIAGConnectee()
+    + FraudeIAGConnectee(dateReleve: LocalDate, description: String, contenu: String, nomService: String, adresseIP: String)
+    + getAdresseIP(): String
+    + setAdresseIP(adresseIP: String)
   }
 }
 
 package "fr.eseo.e3e.devlogiciel.systeme" {
+  interface IAnalyseStatistique {
+    + getNombreTotalFormulaires(): int
+    + getNombreEtudiantsDistincts(): int
+    + getNombreTotalFraudes(): int
+    + getMoyenneFraudesParFormulaire(): double
+    + getEcartTypeFraudesParFormulaire(): double
+  }
+
   class SystemeGestion {
     - formulaires : List<Formulaire>
     - etudiants : List<Etudiant>
@@ -112,10 +195,20 @@ package "fr.eseo.e3e.devlogiciel.systeme" {
     + SystemeGestion()
     + enregistrerFormulaire(f: Formulaire)
     + supprimerFormulaire(id: int)
-    + rechercheCroisee(cursus: Cursus, typeFraude: Class): List<Formulaire>
+    + trouverFormulairesParEtudiant(numeroApprenant: String): List<Formulaire>
+    + trouverFormulairesParEpreuve(codeECUE: String): List<Formulaire>
+    + rechercherEtudiantsParNomPrenom(recherche: String): List<Etudiant>
+    + trouverEtudiantParId(numeroApprenant: String): Etudiant
+    + rechercheCroisee(cursus: Cursus, typeFraude: Class<?>): List<Formulaire>
     + consulterHistorique(): List<EntreeHistorique>
     + sauvegarder(cheminFichier: String)
     + {static} charger(cheminFichier: String): SystemeGestion
+    + getFormulaires(): List<Formulaire>
+    + getEtudiants(): List<Etudiant>
+    + getJournal(): JournalHistorique
+    + genererGrapheTricheurs(): Map<Etudiant, List<Etudiant>>
+    + trouverTricheurLePlusConnecte(): Etudiant
+    + initialiserJeuDeDonnees()
   }
 }
 
@@ -127,9 +220,15 @@ package "fr.eseo.e3e.devlogiciel.ui" {
     + demarrer()
     - afficherMenuPrincipal()
     - saisirNouveauFormulaire()
+    - selectionnerModalite(): Modalite
+    - selectionnerCursus(): Cursus
     - actionSupprimerFormulaire()
     - afficherTousLesFormulaires()
     - actionRechercheCroisee()
+    - actionRechercherEtudiant()
+    - actionRechercherDossiers()
+    - afficherStatistiques()
+    - actionAnalyserReseau()
     - afficherJournalHistorique()
   }
 }
@@ -139,6 +238,7 @@ package "fr.eseo.e3e.devlogiciel" {
     - {static} FICHIER_DATA : String
     - {static} CHEMIN_LOGS : String
     + {static} main(args: String[])
+    - {static} initialiserDonneesTest(systeme: SystemeGestion)
   }
 }
 
@@ -147,6 +247,9 @@ Fraude <|-- FraudeIAG
 Fraude <|-- FraudePapier
 Fraude <|-- FraudeCalculatrice
 FraudeIAG <|-- FraudeIAGConnectee
+
+' --- Implémentation d'interface ---
+IAnalyseStatistique <|.. SystemeGestion
 
 ' --- Relations d'association et composition ---
 SystemeGestion "1" *-- "1" JournalHistorique : possède >
@@ -164,5 +267,15 @@ Epreuve .> Modalite : utilise
 Main ..> SystemeGestion : initialise >
 Main ..> ConsoleUI : lance >
 ConsoleUI "1" --> "1" SystemeGestion : interagit avec >
+
+' --- Relations Utilitaires ---
+ConsoleUI ..> Logger : utilise >
+ConsoleUI ..> FraudeException : gère >
+SystemeGestion ..> Logger : utilise >
+SystemeGestion ..> FraudeException : lance >
+Fraude ..> Logger : utilise >
+JournalHistorique ..> Logger : utilise >
+Epreuve ..> Logger : utilise >
+Etudiant ..> Logger : utilise >
 
 @enduml
