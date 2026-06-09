@@ -143,28 +143,34 @@ public class ConsoleUI {
         }
 
         System.out.println("\n3. DETAILS DE LA FRAUDE");
-        System.out.print("Description des faits : ");
-        String desc = scanner.nextLine().trim();
-        System.out.print("Contenu ou preuves : ");
-        String contenu = scanner.nextLine().trim();
+        boolean ajouterAutreFraude = true;
+        while (ajouterAutreFraude) {
+            System.out.print("Description des faits : ");
+            String desc = scanner.nextLine().trim();
+            System.out.print("Contenu ou preuves : ");
+            String contenu = scanner.nextLine().trim();
 
-        System.out.println("Type : 1.Papier | 2.Calculatrice | 3.IAG Connectée");
-        String cat = scanner.nextLine().trim();
-        Fraude fraude;
-        if (cat.equals("2")) {
-            System.out.print("Marque : "); String marque = scanner.nextLine().trim();
-            System.out.print("Programme : "); String prog = scanner.nextLine().trim();
-            fraude = new FraudeCalculatrice(dateEpreuve, desc, contenu, marque, prog);
-        } else if (cat.equals("3")) {
-            System.out.print("Service (ex: ChatGPT) : "); String service = scanner.nextLine().trim();
-            System.out.print("IP : "); String ip = scanner.nextLine().trim();
-            fraude = new FraudeIAGConnectee(dateEpreuve, desc, contenu, service, ip);
-        } else {
-            System.out.print("Dimensions : "); String dim = scanner.nextLine().trim();
-            System.out.print("Plié ? (oui/non) : "); boolean plie = scanner.nextLine().trim().equalsIgnoreCase("oui");
-            fraude = new FraudePapier(dateEpreuve, desc, contenu, dim, plie);
+            System.out.println("Type : 1.Papier | 2.Calculatrice | 3.IAG Connectée");
+            String cat = scanner.nextLine().trim();
+            Fraude fraude;
+            if (cat.equals("2")) {
+                System.out.print("Marque : "); String marque = scanner.nextLine().trim();
+                System.out.print("Programme : "); String prog = scanner.nextLine().trim();
+                fraude = new FraudeCalculatrice(dateEpreuve, desc, contenu, marque, prog);
+            } else if (cat.equals("3")) {
+                System.out.print("Service (ex: ChatGPT) : "); String service = scanner.nextLine().trim();
+                System.out.print("IP : "); String ip = scanner.nextLine().trim();
+                fraude = new FraudeIAGConnectee(dateEpreuve, desc, contenu, service, ip);
+            } else {
+                System.out.print("Dimensions : "); String dim = scanner.nextLine().trim();
+                System.out.print("Plié ? (oui/non) : "); boolean plie = scanner.nextLine().trim().equalsIgnoreCase("oui");
+                fraude = new FraudePapier(dateEpreuve, desc, contenu, dim, plie);
+            }
+            formulaire.ajouterFraude(fraude);
+
+            System.out.print("Y a-t-il une autre fraude à enregistrer pour ce dossier ? (oui/non) : ");
+            ajouterAutreFraude = scanner.nextLine().trim().equalsIgnoreCase("oui");
         }
-        formulaire.ajouterFraude(fraude);
         systeme.enregistrerFormulaire(formulaire);
         System.out.println("[OK] Dossier enregistré ID : " + formulaire.getId());
     }
@@ -207,6 +213,8 @@ public class ConsoleUI {
      * Demande à l'utilisateur l'identifiant d'un formulaire et procède à sa suppression via le système.
      */
     private void actionSupprimerFormulaire() {
+        System.out.println("\n--- LISTE DES DOSSIERS AVANT SUPPRESSION ---");
+        afficherTousLesFormulaires();
         System.out.print("ID du formulaire à supprimer : ");
         try {
             int id = Integer.parseInt(scanner.nextLine().trim());
