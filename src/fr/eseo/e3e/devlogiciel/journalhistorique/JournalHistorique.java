@@ -26,6 +26,14 @@ public class JournalHistorique implements Serializable {
     }
 
     /**
+     * Constructeur initialisant le journal d'historique
+     * @param entrees La Liste d'entrées existante à charger
+     */
+    public JournalHistorique(List<EntreeHistorique> entrees){
+        this.entrees=(entrees != null)?entrees:new ArrayList<>();
+    }
+
+    /**
      * Crée une nouvelle entrée d'historique et l'ajoute au journal.
      *
      * @param description La description de l'action à enregistrer

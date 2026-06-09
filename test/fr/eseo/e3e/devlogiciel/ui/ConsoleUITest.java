@@ -330,7 +330,7 @@ public class ConsoleUITest {
                 "ECUE-2\n\n\n\n1\n" +
                 "Peloin\nTitouan\n444\n3\n" +
                 "oui\n" +
-                "Collaborateur\nBasile\n666\n3\n" +
+                "Morin\nBasile\n666\n3\n" +
                 "non\n" +
                 "Triche exam\nPreuve2\n" +
                 "1\nA4\nnon\n";

@@ -20,6 +20,14 @@ public class EntreeHistorique implements Serializable {
     private String action;
 
     /**
+     * Constructeur par défaut vide
+     */
+    public EntreeHistorique(){
+        this.horodatage= LocalDateTime.now();
+        this.action= "Action non spécifiée";
+
+    }
+    /**
      * Crée une nouvelle entrée d'historique à l'instant présent.
      *
      * @param action La description de l'action effectuée

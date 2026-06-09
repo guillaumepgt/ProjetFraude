@@ -129,6 +129,28 @@ public class SystemeGestion implements Serializable {
         return cerveau;
     }
 
+    public void initialiserJeuDeDonnees() {
+        if (this.formulaires.isEmpty()) {
+            Etudiant e1 = new Etudiant("Peloin", "Titouan", "444", Cursus.E3e);
+            Etudiant e2 = new Etudiant("Prigent", "Guillaume", "555", Cursus.E3e);
+
+            Formulaire formTest = new Formulaire();
+            formTest.ajouterEtudiant(e1);
+            formTest.ajouterEtudiant(e2);
+
+            formTest.ajouterFraude(new fr.eseo.e3e.devlogiciel.fraude.FraudePapier(
+                    java.time.LocalDate.now(),
+                    "Copie flagrante en salle machine",
+                    "Anti-sèche dans la trousse",
+                    "A4",
+                    true
+            ));
+
+            this.enregistrerFormulaire(formTest);
+            this.journal.ajouterEntree("Initialisation du jeu de données de test (Bouchonnage) terminée.");
+        }
+    }
+
     public List<Formulaire> getFormulaires() { return formulaires; }
     public List<Etudiant> getEtudiants() { return etudiants; }
     public JournalHistorique getJournal() { return journal; }

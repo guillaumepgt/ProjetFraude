@@ -11,6 +11,10 @@ public class Main {
     public static void main(String[] args) {
         SystemeGestion systeme = SystemeGestion.charger(FICHIER_DATA);
 
+        if(systeme.getFormulaires().isEmpty()){
+            systeme.initialiserJeuDeDonnees();
+        }
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             systeme.sauvegarder(FICHIER_DATA);
             systeme.getJournal().exporterEnTexte(CHEMIN_LOGS);
