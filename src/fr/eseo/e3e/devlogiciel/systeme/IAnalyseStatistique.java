@@ -2,7 +2,6 @@ package fr.eseo.e3e.devlogiciel.systeme;
 
 /**
  * Interface définissant les opérations d'analyse statistique sur les fraudes.
- * Utilisée pour satisfaire les exigences pédagogiques de mise en pratique des interfaces.
  */
 public interface IAnalyseStatistique {
     /**

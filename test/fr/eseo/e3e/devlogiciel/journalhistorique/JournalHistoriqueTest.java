@@ -18,7 +18,7 @@ public class JournalHistoriqueTest {
     }
 
     @Test
-    void testConstructeur() {
+    void testConstructeur1() {
         assertNotNull(journal.getEntrees());
         assertTrue(journal.getEntrees().isEmpty());
     }

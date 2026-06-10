@@ -20,7 +20,7 @@ public class Formulaire implements Serializable {
     private final int id;
     private final LocalDateTime dateCreation;
     private LocalDateTime dateDerniereModification;
-    private Epreuve epreuve; // CORRECTION : Une seule épreuve par formulaire
+    private Epreuve epreuve;
     private final List<Etudiant> etudiants;
     private final List<Fraude> fraudes;
 

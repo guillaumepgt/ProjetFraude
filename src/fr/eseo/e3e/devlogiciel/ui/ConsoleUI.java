@@ -7,11 +7,11 @@ import fr.eseo.e3e.devlogiciel.formulaire.Formulaire;
 import fr.eseo.e3e.devlogiciel.fraude.*;
 import fr.eseo.e3e.devlogiciel.journalhistorique.EntreeHistorique;
 import fr.eseo.e3e.devlogiciel.systeme.SystemeGestion;
-import fr.eseo.e3e.devlogiciel.utils.FraudeException;
 import fr.eseo.e3e.devlogiciel.utils.Logger;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class ConsoleUI {
     }
 
     /**
-     * Lance la boucle principale de l'application interactive.
+     * Lance la boucle principale de l'application.
      * Affiche le menu et traite les actions jusqu'à ce que l'utilisateur décide de quitter.
      */
     public void demarrer() {
@@ -106,11 +106,16 @@ public class ConsoleUI {
         String code = scanner.nextLine().trim();
 
         LocalDate dateEpreuve = LocalDate.now();
-        System.out.print("Date (AAAA-MM-JJ) [Entree pour aujourd'hui] : ");
+        System.out.print("Date (JJ-MM-AAAA) [Entree pour aujourd'hui] : ");
         String dateStr = scanner.nextLine().trim();
         if (!dateStr.isEmpty()) {
-            try { dateEpreuve = LocalDate.parse(dateStr); }
-            catch (DateTimeParseException e) { Logger.avertissement("Format incorrect (AAAA-MM-JJ). Date du jour sélectionnée."); }
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                dateEpreuve = LocalDate.parse(dateStr, formatter);
+            }
+            catch (DateTimeParseException e) {
+                Logger.avertissement("Format incorrect (Attendu : JJ-MM-AAAA). Date du jour sélectionnée.");
+            }
         }
 
         System.out.print("Heure du contrôle (HH:MM) : ");
@@ -134,9 +139,9 @@ public class ConsoleUI {
             System.out.print("Prénom : ");
             String prenom = scanner.nextLine().trim();
             System.out.print("Numéro étudiant : ");
-            String numApp = scanner.nextLine().trim();
+            String id = scanner.nextLine().trim();
             Cursus cursus = selectionnerCursus();
-            formulaire.ajouterEtudiant(new Etudiant(nom, prenom, numApp, cursus));
+            formulaire.ajouterEtudiant(new Etudiant(nom, prenom, id, cursus));
 
             System.out.print("Ajouter un complice ? (oui/non) : ");
             ajouterUnAutre = scanner.nextLine().trim().equalsIgnoreCase("oui");

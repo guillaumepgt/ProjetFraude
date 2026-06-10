@@ -5,6 +5,7 @@ import fr.eseo.e3e.devlogiciel.utils.Logger;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Représente un étudiant inscrit dans l'école.
@@ -151,7 +152,7 @@ public class Etudiant implements Serializable {
 
         Etudiant etudiant = (Etudiant) o;
 
-        return numeroApprenant != null ? numeroApprenant.equals(etudiant.numeroApprenant) : etudiant.numeroApprenant == null;
+        return Objects.equals(numeroApprenant, etudiant.numeroApprenant);
     }
 
     /**

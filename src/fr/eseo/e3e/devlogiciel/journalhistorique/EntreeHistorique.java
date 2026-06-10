@@ -29,9 +29,8 @@ public class EntreeHistorique implements Serializable {
     public EntreeHistorique(){
         this.horodatage= LocalDateTime.now();
         this.action= "Action non spécifiée";
-
+        Logger.info("Création d'entrée d'historique (Par défault)");
     }
-
 
     /**
      * Crée une nouvelle entrée d'historique à l'instant présent.
@@ -39,8 +38,8 @@ public class EntreeHistorique implements Serializable {
      * @param action La description de l'action effectuée
      */
     public EntreeHistorique(String action) {
-        this.horodatage = LocalDateTime.now();
-        this.action = action;
+        this.setHorodatage(LocalDateTime.now());
+        this.setAction(action);
     }
 
     /**

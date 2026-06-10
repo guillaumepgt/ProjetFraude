@@ -1,5 +1,6 @@
 package fr.eseo.e3e.devlogiciel.systeme;
 
+import fr.eseo.e3e.devlogiciel.epreuve.Epreuve;
 import fr.eseo.e3e.devlogiciel.etudiant.Etudiant;
 import fr.eseo.e3e.devlogiciel.etudiant.Etudiant.Cursus;
 import fr.eseo.e3e.devlogiciel.formulaire.Formulaire;
@@ -11,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,12 @@ public class SystemeGestionTest {
     private SystemeGestion systeme;
     private static final String FICHIER_TEST = "sauvegarde_test.dat";
 
+    private Formulaire form1;
+    private Formulaire form2;
+    private Etudiant etudiant1;
+    private Etudiant etudiant2;
+    private Etudiant etudiant3;
+
     @BeforeEach
     public void setUp() {
         systeme = new SystemeGestion();
@@ -29,17 +38,21 @@ public class SystemeGestionTest {
         if (file.exists()) {
             file.delete();
         }
+
+        form1 = new Formulaire();
+        form2 = new Formulaire();
+        etudiant1 = new Etudiant("Durand", "Jean", "E001", Cursus.E3e);
+        etudiant2 = new Etudiant("Smith", "Alice", "E002", Cursus.E4);
+        etudiant3 = new Etudiant("Martin", "Bob", "E003", Cursus.E3e);
     }
 
     @Test
     public void testEnregistrerFormulaireValide() {
-        Formulaire form = new Formulaire();
-        int idAttendu = form.getId();
-
-        systeme.enregistrerFormulaire(form);
+        int idAttendu = form1.getId();
+        systeme.enregistrerFormulaire(form1);
 
         assertEquals(1, systeme.getFormulaires().size());
-        assertEquals(form, systeme.getFormulaires().get(0));
+        assertEquals(form1, systeme.getFormulaires().get(0));
         assertEquals(1, systeme.getJournal().getEntrees().size());
         assertEquals("Enregistrement du formulaire ID : " + idAttendu, systeme.getJournal().getEntrees().get(0).getAction());
     }
@@ -47,17 +60,14 @@ public class SystemeGestionTest {
     @Test
     public void testEnregistrerFormulaireNull() {
         systeme.enregistrerFormulaire(null);
-
         assertEquals(0, systeme.getFormulaires().size());
         assertEquals(0, systeme.getJournal().getEntrees().size());
     }
 
     @Test
     public void testSupprimerFormulaireSucces() throws FraudeException {
-        Formulaire form = new Formulaire();
-        int idDossier = form.getId();
-        systeme.enregistrerFormulaire(form);
-
+        int idDossier = form1.getId();
+        systeme.enregistrerFormulaire(form1);
         systeme.supprimerFormulaire(idDossier);
 
         assertEquals(0, systeme.getFormulaires().size());
@@ -67,10 +77,8 @@ public class SystemeGestionTest {
 
     @Test
     public void testSupprimerFormulaireEchec() {
-        Formulaire form = new Formulaire();
-        systeme.enregistrerFormulaire(form);
-
-        int mauvaisId = form.getId() + 999;
+        systeme.enregistrerFormulaire(form1);
+        int mauvaisId = form1.getId() + 999;
 
         assertThrows(FraudeException.class, () -> systeme.supprimerFormulaire(mauvaisId), "Échec : Le système aurait dû lever une FraudeException pour un ID inexistant.");
         assertEquals(1, systeme.getFormulaires().size(), "Échec : La taille de la liste a bougé alors que la suppression a échoué.");
@@ -78,16 +86,14 @@ public class SystemeGestionTest {
 
     @Test
     public void testRechercheCroisee() {
-        Formulaire form1 = new Formulaire();
-        form1.ajouterEtudiant(new Etudiant("Doe", "John", "123", Cursus.E3e));
+        form1.ajouterEtudiant(etudiant1);
         form1.ajouterFraude(new FraudePapier(LocalDate.now(), "Triche", "Preuve", "A4", true));
 
-        Formulaire form2 = new Formulaire();
-        form2.ajouterEtudiant(new Etudiant("Smith", "Alice", "456", Cursus.E4));
+        form2.ajouterEtudiant(etudiant2);
         form2.ajouterFraude(new FraudePapier(LocalDate.now(), "Triche 2", "Preuve 2", "A5", false));
 
         Formulaire form3 = new Formulaire();
-        form3.ajouterEtudiant(new Etudiant("Martin", "Bob", "789", Cursus.E3e));
+        form3.ajouterEtudiant(etudiant3);
         form3.ajouterFraude(new FraudeCalculatrice(LocalDate.now(), "Triche 3", "Preuve 3", "Casio", "Prog"));
 
         systeme.enregistrerFormulaire(form1);
@@ -104,29 +110,24 @@ public class SystemeGestionTest {
 
     @Test
     public void testConsulterHistorique() {
-        systeme.enregistrerFormulaire(new Formulaire());
-
+        systeme.enregistrerFormulaire(form1);
         List<EntreeHistorique> historique = systeme.consulterHistorique();
-
         assertNotNull(historique);
         assertEquals(1, historique.size());
     }
 
     @Test
     public void testSauvegarderEtChargerSucces() {
-        Formulaire form = new Formulaire();
-        systeme.enregistrerFormulaire(form);
-
+        systeme.enregistrerFormulaire(form1);
         systeme.sauvegarder(FICHIER_TEST);
 
         File fichier = new File(FICHIER_TEST);
         assertTrue(fichier.exists());
 
         SystemeGestion systemeCharge = SystemeGestion.charger(FICHIER_TEST);
-
         assertNotNull(systemeCharge);
         assertEquals(1, systemeCharge.getFormulaires().size());
-        assertEquals(form.getId(), systemeCharge.getFormulaires().get(0).getId());
+        assertEquals(form1.getId(), systemeCharge.getFormulaires().get(0).getId());
 
         fichier.delete();
     }
@@ -140,20 +141,18 @@ public class SystemeGestionTest {
     @Test
     public void testChargerFichierInexistant() {
         SystemeGestion systemeVide = SystemeGestion.charger("fichier_fantome.dat");
-
         assertNotNull(systemeVide);
         assertEquals(0, systemeVide.getFormulaires().size());
     }
 
     @Test
-    public void testChargerFichierCorrompu() throws java.io.IOException {
+    public void testChargerFichierCorrompu() throws IOException {
         File fichierCorrompu = new File("corrompu.dat");
-        java.io.FileWriter fw = new java.io.FileWriter(fichierCorrompu);
+        FileWriter fw = new FileWriter(fichierCorrompu);
         fw.write("Pas un objet sérialisé");
         fw.close();
 
         SystemeGestion systemeVide = SystemeGestion.charger("corrompu.dat");
-
         assertNotNull(systemeVide);
         assertEquals(0, systemeVide.getFormulaires().size());
 
@@ -169,19 +168,11 @@ public class SystemeGestionTest {
 
     @Test
     void testGenererGrapheEtTrouverCerveau() {
-        SystemeGestion systeme = new SystemeGestion();
+        form1.ajouterEtudiant(etudiant1);
+        form1.ajouterEtudiant(etudiant2);
 
-        Etudiant titouan = new Etudiant("1", "Peloin", "Titouan", Cursus.E3e);
-        Etudiant guillaume = new Etudiant("2", "Prigent", "Guillaume", Cursus.E3e);
-        Etudiant basile = new Etudiant("3", "Morin", "Basile", Cursus.E3e);
-
-        Formulaire form1 = new Formulaire();
-        form1.ajouterEtudiant(titouan);
-        form1.ajouterEtudiant(guillaume);
-
-        Formulaire form2 = new Formulaire();
-        form2.ajouterEtudiant(titouan);
-        form2.ajouterEtudiant(basile);
+        form2.ajouterEtudiant(etudiant1);
+        form2.ajouterEtudiant(etudiant3);
 
         systeme.enregistrerFormulaire(form1);
         systeme.enregistrerFormulaire(form2);
@@ -189,74 +180,65 @@ public class SystemeGestionTest {
         Map<Etudiant, List<Etudiant>> graphe = systeme.genererGrapheTricheurs();
 
         assertNotNull(graphe);
-        assertEquals(2, graphe.get(titouan).size());
-        assertEquals(1, graphe.get(guillaume).size());
-        assertEquals(titouan, systeme.trouverTricheurLePlusConnecte());
+        assertEquals(2, graphe.get(etudiant1).size());
+        assertEquals(1, graphe.get(etudiant2).size());
+        assertEquals(etudiant1, systeme.trouverTricheurLePlusConnecte());
     }
 
     @Test
     public void testTrouverCerveauSystemeVide() {
-        SystemeGestion systemeVide = new SystemeGestion();
-        assertNull(systemeVide.trouverTricheurLePlusConnecte());
+        assertNull(systeme.trouverTricheurLePlusConnecte());
     }
 
     @Test
     public void testGrapheTricheursDoublonsRenvoyes() {
-        SystemeGestion sysDoublon = new SystemeGestion();
+        form1.ajouterEtudiant(etudiant1);
+        form1.ajouterEtudiant(etudiant2);
 
-        Etudiant tricheur1 = new Etudiant("10", "Dupont", "Jean", Cursus.E3e);
-        Etudiant tricheur2 = new Etudiant("11", "Martin", "Paul", Cursus.E3e);
+        form2.ajouterEtudiant(etudiant1);
+        form2.ajouterEtudiant(etudiant2);
 
-        Formulaire f1 = new Formulaire();
-        f1.ajouterEtudiant(tricheur1);
-        f1.ajouterEtudiant(tricheur2);
+        systeme.enregistrerFormulaire(form1);
+        systeme.enregistrerFormulaire(form2);
 
-        Formulaire f2 = new Formulaire();
-        f2.ajouterEtudiant(tricheur1);
-        f2.ajouterEtudiant(tricheur2);
+        Map<Etudiant, List<Etudiant>> graphe = systeme.genererGrapheTricheurs();
 
-        sysDoublon.enregistrerFormulaire(f1);
-        sysDoublon.enregistrerFormulaire(f2);
-
-        Map<Etudiant, List<Etudiant>> graphe = sysDoublon.genererGrapheTricheurs();
-
-        assertEquals(1, graphe.get(tricheur1).size());
-        assertTrue(graphe.get(tricheur1).contains(tricheur2));
+        assertEquals(1, graphe.get(etudiant1).size());
+        assertTrue(graphe.get(etudiant1).contains(etudiant2));
     }
-
 
     @Test
     public void testRechercheEtudiant() {
-        Etudiant e1 = new Etudiant("Durand", "Jean", "E001", Cursus.E1);
-        Formulaire f = new Formulaire();
-        f.ajouterEtudiant(e1);
-        systeme.enregistrerFormulaire(f);
-        assertEquals(e1, systeme.trouverEtudiantParId("E001"));
+        form1.ajouterEtudiant(etudiant1);
+        systeme.enregistrerFormulaire(form1);
+
+        assertEquals(etudiant1, systeme.trouverEtudiantParId("E001"));
         assertFalse(systeme.rechercherEtudiantsParNomPrenom("Durand").isEmpty());
     }
 
     @Test
     public void testTrouverFormulairesParEtudiantEtEpreuve() {
-        Etudiant e1 = new Etudiant("Durand", "Jean", "E001", Cursus.E1);
-        fr.eseo.e3e.devlogiciel.epreuve.Epreuve ep = new fr.eseo.e3e.devlogiciel.epreuve.Epreuve();
+        Epreuve ep = new Epreuve();
         ep.setCodeECUE("MA101");
-        Formulaire f = new Formulaire();
-        f.ajouterEtudiant(e1);
-        f.setEpreuve(ep);
-        systeme.enregistrerFormulaire(f);
+
+        form1.ajouterEtudiant(etudiant1);
+        form1.setEpreuve(ep);
+        systeme.enregistrerFormulaire(form1);
+
         assertEquals(1, systeme.trouverFormulairesParEtudiant("E001").size());
         assertEquals(1, systeme.trouverFormulairesParEpreuve("MA101").size());
     }
 
     @Test
     public void testStatistiques() {
-        Formulaire f1 = new Formulaire();
-        f1.ajouterFraude(new FraudePapier(LocalDate.now(), "D1", "C1", "A4", true));
-        Formulaire f2 = new Formulaire();
-        f2.ajouterFraude(new FraudePapier(LocalDate.now(), "D2", "C2", "A4", true));
-        f2.ajouterFraude(new FraudePapier(LocalDate.now(), "D3", "C3", "A4", true));
-        systeme.enregistrerFormulaire(f1);
-        systeme.enregistrerFormulaire(f2);
+        form1.ajouterFraude(new FraudePapier(LocalDate.now(), "D1", "C1", "A4", true));
+
+        form2.ajouterFraude(new FraudePapier(LocalDate.now(), "D2", "C2", "A4", true));
+        form2.ajouterFraude(new FraudePapier(LocalDate.now(), "D3", "C3", "A4", true));
+
+        systeme.enregistrerFormulaire(form1);
+        systeme.enregistrerFormulaire(form2);
+
         assertEquals(2, systeme.getNombreTotalFormulaires());
         assertEquals(3, systeme.getNombreTotalFraudes());
         assertEquals(1.5, systeme.getMoyenneFraudesParFormulaire(), 0.001);
@@ -269,5 +251,45 @@ public class SystemeGestionTest {
         assertEquals(0, systeme.getNombreTotalFraudes());
         assertEquals(0, systeme.getMoyenneFraudesParFormulaire(), 0.001);
         assertEquals(0, systeme.getEcartTypeFraudesParFormulaire(), 0.001);
+    }
+
+    @Test
+    public void testGetNombreEtudiantsDistincts() {
+        form1.ajouterEtudiant(etudiant1);
+        systeme.enregistrerFormulaire(form1);
+        assertEquals(1, systeme.getNombreEtudiantsDistincts());
+    }
+
+    @Test
+    public void testEnregistrerFormulaireEtudiantExistant() {
+        form1.ajouterEtudiant(etudiant1);
+        systeme.enregistrerFormulaire(form1);
+
+        form2.ajouterEtudiant(etudiant1);
+        systeme.enregistrerFormulaire(form2);
+
+        assertEquals(1, systeme.getEtudiants().size());
+    }
+
+    @Test
+    public void testRechercheEtudiantIntrouvable() {
+        assertNull(systeme.trouverEtudiantParId("ID_FANTOME"));
+        assertTrue(systeme.rechercherEtudiantsParNomPrenom("Inconnu").isEmpty());
+    }
+
+    @Test
+    public void testRechercheParPrenom() {
+        form1.ajouterEtudiant(etudiant1);
+        systeme.enregistrerFormulaire(form1);
+
+        assertFalse(systeme.rechercherEtudiantsParNomPrenom("Jean").isEmpty());
+    }
+
+    @Test
+    public void testTrouverFormulairesParEpreuveNulle() {
+        systeme.enregistrerFormulaire(form1);
+
+        List<Formulaire> resultats = systeme.trouverFormulairesParEpreuve("CODE_QUELCONQUE");
+        assertTrue(resultats.isEmpty(), "La recherche doit ignorer les formulaires sans épreuve.");
     }
 }

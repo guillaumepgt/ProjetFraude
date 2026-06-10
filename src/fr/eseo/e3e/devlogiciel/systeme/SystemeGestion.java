@@ -49,18 +49,18 @@ public class SystemeGestion implements Serializable, IAnalyseStatistique {
      * Ajoute un nouveau formulaire dans la liste et trace l'action.
      * Met également à jour la liste globale des étudiants si nécessaire.
      *
-     * @param f Le formulaire de fraude à enregistrer
+     * @param formulaire Le formulaire de fraude à enregistrer
      */
-    public void enregistrerFormulaire(Formulaire f) {
-        if (f != null) {
-            this.formulaires.add(f);
-            for (Etudiant etu : f.getEtudiants()) {
-                if (!this.etudiants.contains(etu)) {
-                    this.etudiants.add(etu);
+    public void enregistrerFormulaire(Formulaire formulaire) {
+        if (formulaire != null) {
+            this.formulaires.add(formulaire);
+            for (Etudiant etudiant : formulaire.getEtudiants()) {
+                if (!this.etudiants.contains(etudiant)) {
+                    this.etudiants.add(etudiant);
                 }
             }
-            this.journal.ajouterEntree("Enregistrement du formulaire ID : " + f.getId());
-            Logger.succes("Formulaire ID " + f.getId() + " enregistré dans le système.");
+            this.journal.ajouterEntree("Enregistrement du formulaire ID : " + formulaire.getId());
+            Logger.succes("Formulaire ID " + formulaire.getId() + " enregistré dans le système.");
         } else {
             Logger.avertissement("Tentative d'enregistrement d'un formulaire vide (null).");
         }
@@ -327,27 +327,5 @@ public class SystemeGestion implements Serializable, IAnalyseStatistique {
             }
         }
         return cerveau;
-    }
-
-    public void initialiserJeuDeDonnees() {
-        if (this.formulaires.isEmpty()) {
-            Etudiant e1 = new Etudiant("Peloin", "Titouan", "444", Cursus.E3e);
-            Etudiant e2 = new Etudiant("Prigent", "Guillaume", "555", Cursus.E3e);
-
-            Formulaire formTest = new Formulaire();
-            formTest.ajouterEtudiant(e1);
-            formTest.ajouterEtudiant(e2);
-
-            formTest.ajouterFraude(new fr.eseo.e3e.devlogiciel.fraude.FraudePapier(
-                    java.time.LocalDate.now(),
-                    "Copie flagrante en salle machine",
-                    "Anti-sèche dans la trousse",
-                    "A4",
-                    true
-            ));
-
-            this.enregistrerFormulaire(formTest);
-            this.journal.ajouterEntree("Initialisation du jeu de données de test (Bouchonnage) terminée.");
-        }
     }
 }
