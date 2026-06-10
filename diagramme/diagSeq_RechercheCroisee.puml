@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+actor "Utilisateur" as User
+participant "ConsoleUI" as UI
+participant "systeme: SystemeGestion" as Sys
+participant "Logger" as Log
+
+User -> UI : 4. Sélectionner "Recherche croisée"
+activate UI
+UI --> User : Demande Cursus et Type de Fraude
+User -> UI : Saisit (ex: E3e, FraudePapier)
+
+UI -> Sys : rechercheCroisee(Cursus.E3e, FraudePapier.class)
+activate Sys
+
+Sys -> Sys : Création liste 'resultats' vide
+
+loop Pour chaque Formulaire (form)
+    Sys -> Sys : Vérifie si form.getEtudiants() contient Cursus.E3e
+    Sys -> Sys : Vérifie si form.getFraudes() contient une instance de FraudePapier
+
+    opt Si les deux conditions sont vraies
+        Sys -> Sys : resultats.add(form)
+    end
+end
+
+Sys -> Log : info("Recherche croisée terminée...")
+Sys --> UI : resultats (List<Formulaire>)
+deactivate Sys
+
+alt resultats est vide
+    UI -> Log : info("Aucun dossier ne correspond.")
+else resultats contient des formulaires
+    UI -> Log : succes("Résultat(s) trouvé(s) :")
+    loop Pour chaque formulaire dans resultats
+        UI --> User : Affiche l'ID du dossier
+    end
+end
+
+deactivate UI
+@enduml

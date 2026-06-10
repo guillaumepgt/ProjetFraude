@@ -1,0 +1,37 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+actor "Utilisateur\n(Gestionnaire)" as User
+participant "Système de Gestion\ndes Fraudes" as Sys
+
+User -> Sys : Demande l'ajout d'un nouveau dossier
+activate Sys
+Sys --> User : Affiche les types d'épreuves et demande une sélection
+deactivate Sys
+
+User -> Sys : Saisit les informations de l'épreuve (Code, Date, Durée...)
+activate Sys
+Sys --> User : Demande les informations des étudiants impliqués
+deactivate Sys
+
+loop Saisie des étudiants
+    User -> Sys : Saisit l'identité et le cursus de l'étudiant
+    activate Sys
+    Sys --> User : Demande s'il y a un complice ou passe aux fraudes
+    deactivate Sys
+end
+
+loop Saisie des fraudes
+    User -> Sys : Saisit le type et les preuves de la fraude
+    activate Sys
+    Sys --> User : Demande s'il y a une autre fraude
+    deactivate Sys
+end
+
+User -> Sys : Confirme la fin de la saisie
+activate Sys
+Sys --> User : Confirme l'enregistrement du dossier (Affiche l'ID)
+deactivate Sys
+
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+actor "Utilisateur" as User
+participant "ConsoleUI" as UI
+participant "systeme: SystemeGestion" as Sys
+participant "journal: JournalHistorique" as Journal
+participant "Logger" as Log
+
+User -> UI : 2. Sélectionner "Supprimer un dossier"
+activate UI
+UI --> User : Demande l'ID du formulaire
+User -> UI : Saisit l'ID (ex: 999)
+
+UI -> Sys : supprimerFormulaire(id)
+activate Sys
+Sys -> Sys : Recherche dans la liste 'formulaires'
+
+alt Formulaire trouvé
+    Sys -> Sys : Retire le formulaire de la liste
+    Sys -> Journal : ajouterEntree("Suppression du formulaire ID : " + id)
+    Sys -> Log : succes("Le formulaire a bien été supprimé.")
+    Sys --> UI : (Retour normal)
+else Formulaire non trouvé
+    Sys -> Journal : ajouterEntree("Tentative échouée de suppression...")
+    Sys -> Sys : throw new FraudeException("Aucun dossier trouvé")
+    Sys --> UI : FraudeException
+end
+deactivate Sys
+
+alt Succès
+    UI -> User : (L'utilisateur voit le message de succès via Logger)
+else Catch FraudeException
+    UI -> Log : erreur(e.getMessage())
+    UI -> User : (L'utilisateur voit l'erreur sans crash)
+end
+
+deactivate UI
+@enduml
