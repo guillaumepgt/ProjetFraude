@@ -12,7 +12,6 @@ class EpreuveTest {
     @Test
     void testConstructeurParDefaut() {
         Epreuve epreuve = new Epreuve();
-
         assertNull(epreuve.getCodeECUE());
         assertNull(epreuve.getDate());
         assertNull(epreuve.getHeurePassage());
@@ -50,6 +49,23 @@ class EpreuveTest {
         assertEquals(heureTest, epreuve.getHeurePassage());
         assertEquals(90, epreuve.getDuree());
         assertEquals(Epreuve.Modalite.QCM, epreuve.getModalite());
+    }
+
+    @Test
+    void testSettersConditionsInvalides() {
+        Epreuve epreuve = new Epreuve();
+
+        epreuve.setCodeECUE(null);
+        assertNull(epreuve.getCodeECUE());
+
+        epreuve.setCodeECUE("   ");
+        assertEquals("   ", epreuve.getCodeECUE());
+
+        epreuve.setDuree(0);
+        assertEquals(0, epreuve.getDuree());
+
+        epreuve.setDuree(-10);
+        assertEquals(-10, epreuve.getDuree());
     }
 
     @Test

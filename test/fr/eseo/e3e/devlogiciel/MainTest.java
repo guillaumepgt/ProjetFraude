@@ -1,5 +1,7 @@
 package fr.eseo.e3e.devlogiciel;
 
+import fr.eseo.e3e.devlogiciel.formulaire.Formulaire;
+import fr.eseo.e3e.devlogiciel.systeme.SystemeGestion;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,12 +48,21 @@ public class MainTest {
     @Test
     public void testMainEtQuitterImmediat() {
         simulerEntreeMenu("10\n");
-
         assertDoesNotThrow(() -> Main.main(new String[]{}));
     }
 
     @Test
     public void testConstructeurMain() {
         assertDoesNotThrow(Main::new);
+    }
+
+    @Test
+    public void testMainAvecFichierExistant() {
+        SystemeGestion sys = new SystemeGestion();
+        sys.enregistrerFormulaire(new Formulaire());
+        sys.sauvegarder(FICHIER_DATA);
+
+        simulerEntreeMenu("10\n");
+        assertDoesNotThrow(() -> Main.main(new String[]{}));
     }
 }

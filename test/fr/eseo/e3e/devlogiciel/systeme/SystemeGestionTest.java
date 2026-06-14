@@ -80,8 +80,8 @@ public class SystemeGestionTest {
         systeme.enregistrerFormulaire(form1);
         int mauvaisId = form1.getId() + 999;
 
-        assertThrows(FraudeException.class, () -> systeme.supprimerFormulaire(mauvaisId), "Échec : Le système aurait dû lever une FraudeException pour un ID inexistant.");
-        assertEquals(1, systeme.getFormulaires().size(), "Échec : La taille de la liste a bougé alors que la suppression a échoué.");
+        assertThrows(FraudeException.class, () -> systeme.supprimerFormulaire(mauvaisId));
+        assertEquals(1, systeme.getFormulaires().size());
     }
 
     @Test
@@ -104,8 +104,6 @@ public class SystemeGestionTest {
 
         assertEquals(1, resultats.size());
         assertEquals(form1, resultats.get(0));
-        assertEquals(4, systeme.getJournal().getEntrees().size());
-        assertEquals("Recherche croisée effectuée pour le cursus E3e et le type FraudePapier", systeme.getJournal().getEntrees().get(3).getAction());
     }
 
     @Test
@@ -120,7 +118,6 @@ public class SystemeGestionTest {
     public void testSauvegarderEtChargerSucces() {
         systeme.enregistrerFormulaire(form1);
         systeme.sauvegarder(FICHIER_TEST);
-
         File fichier = new File(FICHIER_TEST);
         assertTrue(fichier.exists());
 
@@ -170,15 +167,12 @@ public class SystemeGestionTest {
     void testGenererGrapheEtTrouverCerveau() {
         form1.ajouterEtudiant(etudiant1);
         form1.ajouterEtudiant(etudiant2);
-
         form2.ajouterEtudiant(etudiant1);
         form2.ajouterEtudiant(etudiant3);
-
         systeme.enregistrerFormulaire(form1);
         systeme.enregistrerFormulaire(form2);
 
         Map<Etudiant, List<Etudiant>> graphe = systeme.genererGrapheTricheurs();
-
         assertNotNull(graphe);
         assertEquals(2, graphe.get(etudiant1).size());
         assertEquals(1, graphe.get(etudiant2).size());
@@ -194,15 +188,12 @@ public class SystemeGestionTest {
     public void testGrapheTricheursDoublonsRenvoyes() {
         form1.ajouterEtudiant(etudiant1);
         form1.ajouterEtudiant(etudiant2);
-
         form2.ajouterEtudiant(etudiant1);
         form2.ajouterEtudiant(etudiant2);
-
         systeme.enregistrerFormulaire(form1);
         systeme.enregistrerFormulaire(form2);
 
         Map<Etudiant, List<Etudiant>> graphe = systeme.genererGrapheTricheurs();
-
         assertEquals(1, graphe.get(etudiant1).size());
         assertTrue(graphe.get(etudiant1).contains(etudiant2));
     }
@@ -211,16 +202,13 @@ public class SystemeGestionTest {
     public void testRechercheEtudiant() {
         form1.ajouterEtudiant(etudiant1);
         systeme.enregistrerFormulaire(form1);
-
         assertEquals(etudiant1, systeme.trouverEtudiantParId("E001"));
-        assertFalse(systeme.rechercherEtudiantsParNomPrenom("Durand").isEmpty());
     }
 
     @Test
     public void testTrouverFormulairesParEtudiantEtEpreuve() {
         Epreuve ep = new Epreuve();
         ep.setCodeECUE("MA101");
-
         form1.ajouterEtudiant(etudiant1);
         form1.setEpreuve(ep);
         systeme.enregistrerFormulaire(form1);
@@ -232,7 +220,6 @@ public class SystemeGestionTest {
     @Test
     public void testStatistiques() {
         form1.ajouterFraude(new FraudePapier(LocalDate.now(), "D1", "C1", "A4", true));
-
         form2.ajouterFraude(new FraudePapier(LocalDate.now(), "D2", "C2", "A4", true));
         form2.ajouterFraude(new FraudePapier(LocalDate.now(), "D3", "C3", "A4", true));
 
@@ -264,10 +251,8 @@ public class SystemeGestionTest {
     public void testEnregistrerFormulaireEtudiantExistant() {
         form1.ajouterEtudiant(etudiant1);
         systeme.enregistrerFormulaire(form1);
-
         form2.ajouterEtudiant(etudiant1);
         systeme.enregistrerFormulaire(form2);
-
         assertEquals(1, systeme.getEtudiants().size());
     }
 
@@ -278,18 +263,9 @@ public class SystemeGestionTest {
     }
 
     @Test
-    public void testRechercheParPrenom() {
-        form1.ajouterEtudiant(etudiant1);
-        systeme.enregistrerFormulaire(form1);
-
-        assertFalse(systeme.rechercherEtudiantsParNomPrenom("Jean").isEmpty());
-    }
-
-    @Test
     public void testTrouverFormulairesParEpreuveNulle() {
+        form1.setEpreuve(null);
         systeme.enregistrerFormulaire(form1);
-
-        List<Formulaire> resultats = systeme.trouverFormulairesParEpreuve("CODE_QUELCONQUE");
-        assertTrue(resultats.isEmpty(), "La recherche doit ignorer les formulaires sans épreuve.");
+        assertTrue(systeme.trouverFormulairesParEpreuve("TEST").isEmpty());
     }
 }

@@ -1,0 +1,13 @@
+test/fr/eseo/e3e/devlogiciel/ui/ConsoleUITest.java
+test/fr/eseo/e3e/devlogiciel/formulaire/FormulaireTest.java
+test/fr/eseo/e3e/devlogiciel/fraude/FraudeIAGConnecteeTest.java
+test/fr/eseo/e3e/devlogiciel/fraude/FraudeTest.java
+test/fr/eseo/e3e/devlogiciel/fraude/FraudeCalculatriceTest.java
+test/fr/eseo/e3e/devlogiciel/fraude/FraudePapierTest.java
+test/fr/eseo/e3e/devlogiciel/fraude/FraudeIAGTest.java
+test/fr/eseo/e3e/devlogiciel/etudiant/EtudiantTest.java
+test/fr/eseo/e3e/devlogiciel/systeme/SystemeGestionTest.java
+test/fr/eseo/e3e/devlogiciel/epreuve/EpreuveTest.java
+test/fr/eseo/e3e/devlogiciel/journalhistorique/EntreeHistoriqueTest.java
+test/fr/eseo/e3e/devlogiciel/journalhistorique/JournalHistoriqueTest.java
+test/fr/eseo/e3e/devlogiciel/MainTest.java

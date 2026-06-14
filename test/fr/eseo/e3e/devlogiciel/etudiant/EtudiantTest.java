@@ -32,4 +32,15 @@ public class EtudiantTest {
         assertEquals(e1.hashCode(), e2.hashCode(), "Le hashcode doit être identique pour le même ID.");
         assertNotEquals(e1, e3, "Deux étudiants avec des ID différents ne sont pas égaux.");
     }
+
+    @Test
+    public void testEqualsEtHashCodeBranchesEdgeCases() {
+        Etudiant e1 = new Etudiant("Test", "Test", "123", E1);
+        Etudiant eNullId = new Etudiant("Test", "Test", null, E1);
+
+        assertTrue(e1.equals(e1));
+        assertFalse(e1.equals(null));
+        assertFalse(e1.equals(new Object()));
+        assertEquals(0, eNullId.hashCode());
+    }
 }
